@@ -3,11 +3,9 @@
 namespace RecordStoreBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,21 +14,52 @@ class UserType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('username', TextType::class)
-                ->add('email', EmailType::class)
-                ->add('rawPassword', RepeatedType::class, [
-                        'type' => PasswordType::class,
-                        'first_options' => [
-                            'label' => 'Password'
-                        ],
-                        'second_options' => [
-                            'label' => 'Confirm Password'
-                        ]
-                ])
-                ->add('firstName', TextType::class)
-                ->add('lastName', TextType::class)
-                ->add('phoneNumber', TextType::class)
-                ->add('Register', SubmitType::class, ['attr' =>['class' => 'btn btn-primary']]);
+        $builder->add('username', TextType::class, [
+            'attr' => [
+                'placeholder' => "Username",
+
+            ],
+            'label' => false
+        ])
+            ->add('email', EmailType::class, [
+                'attr' => [
+                    'placeholder' => "Email Address"
+                ],
+                'label' => false
+            ])
+            ->add('rawPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'attr' => [
+                    'placeholder' => 'Password'
+                ],
+                'first_options' => [
+                    'label' => false,
+                    'attr' => ['placeholder' => 'Enter password']
+                ],
+                'second_options' => [
+                    'label' => false,
+                    'attr' => ['placeholder' => 'Confirm password']
+                ]
+
+            ])
+            ->add('firstName', TextType::class, [
+                'attr' => [
+                    'placeholder' => "First Name"
+                ],
+                'label' => false
+            ])
+            ->add('lastName', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Last Name"
+                ],
+                'label' => false
+            ])
+            ->add('phoneNumber', TextType::class, [
+                'attr' => [
+                    'placeholder' => "Phone Number"
+                ],
+                'label' => false
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)

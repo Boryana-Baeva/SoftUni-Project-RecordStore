@@ -2,11 +2,20 @@
 
 {% block body %}
     <div class="container">
-        <div class="col-md-4 col-md-offset-4">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
+        <div class="col-sm-4 col-sm-offset-4">
+            <div class="register-form">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h2>Register:</h2>
+                        {{ form_start(form) }}
+                        {{ form_widget(form) }}
+                        {{ form_end(form) }}
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary center-block">Register</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock %}
-

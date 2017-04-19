@@ -10,9 +10,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SecurityController extends Controller
 {
+
     /**
      * @Route("/login", name="user_login" )
      *
@@ -20,6 +22,10 @@ class SecurityController extends Controller
      */
     public function loginAction()
     {
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            return $this->redirectToRoute("homepage");
+        }
+
         $authenticationUtils = $this->get('security.authentication_utils');
 
         // get the login error if there is one
@@ -42,8 +48,12 @@ class SecurityController extends Controller
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function register(){
-
         $form = $this->createForm(UserType::class);
+
+        if ($this->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')){
+            return $this->redirectToRoute("homepage");
+        }
+
         return $this->render("security/register.html.twig", ['form' => $form->createView()] );
     }
 
@@ -60,19 +70,32 @@ class SecurityController extends Controller
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
 
-        if($form->isValid()){
+        if($form->isSubmitted() && $form->isValid()){
+
+            $user->setRoles([ $user->getDefaultRole() ]);
 
             $encoder = $this->get('security.password_encoder');
+
             $user->setPassword(
                 $encoder->encodePassword($user, $user->getRawPassword())
             );
+
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();
 
+            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+            $this->get('security.token_storage')->setToken($token);
             return $this->redirectToRoute("homepage");
         }
 
         return $this->render("security/register.html.twig", ['form' => $form->createView()] );
+    }
+
+    /**
+     * @Route("/logout", name="user_logout")
+     */
+    public function logoutAction(){
+
     }
 }

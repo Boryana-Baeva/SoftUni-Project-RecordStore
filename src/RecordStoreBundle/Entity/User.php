@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class User implements UserInterface
 {
+    const ROLE_USER = 'ROLE_USER';
+    const ROLE_EDITOR = 'ROLE_EDITOR';
+    const ROLE_ADMIN = 'ROLE_ADMIN';
     /**
      * @var int
      *
@@ -78,6 +81,10 @@ class User implements UserInterface
      */
     private $phoneNumber;
 
+    /**
+     * @ORM\Column(name="role", type="string", length=255)
+     */
+    private $role;
 
     /**
      * Get id
@@ -262,14 +269,43 @@ class User implements UserInterface
      * Alternatively, the roles might be stored on a ``roles`` property,
      * and populated in any number of different ways when the user object
      * is created.
-     *
+     */
+
+    public function getDefaultRole()
+    {
+        return self::ROLE_USER;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRole()
+    {
+        return $this->role;
+    }
+
+    /**
+     * @param mixed $role
+     */
+    public function setRole($role)
+    {
+        $this->role = $role;
+    }
+
+    /**
      * @return (Role|string)[] The user roles
      */
     public function getRoles()
     {
-        return ['ROLE_USER'];
+        return explode(',', $this->getRole());
     }
 
+    /**
+     * @param array $roles
+     */
+    public function setRoles($roles){
+        $this->setRole(implode(',', $roles));
+    }
     /**
      * Returns the salt that was originally used to encode the password.
      *
