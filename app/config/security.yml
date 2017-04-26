@@ -38,5 +38,7 @@ security:
                 path: user_logout
 
     access_control:
+        - { path: ^/product , roles: [ROLE_USER, ROLE_ADMIN, ROLE_EDITOR] }
         - { path: ^/register , roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login , roles: IS_AUTHENTICATED_ANONYMOUSLY }
+

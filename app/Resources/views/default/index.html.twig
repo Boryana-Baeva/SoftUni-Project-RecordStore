@@ -1,168 +1,98 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <section id="slider"><!--slider-->
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div id="slider-carousel" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#slider-carousel" data-slide-to="0" class="active"></li>
+                            <li data-target="#slider-carousel" data-slide-to="1"></li>
+                            <li data-target="#slider-carousel" data-slide-to="2"></li>
+                        </ol>
 
-        <section id="slider"><!--slider-->
-            <div class="container">
-                <div class="row">
-                    <div id="slider-carousel">
-                        <div class="col-sm-3">
-                            <img src="{{ asset('images/home/record-store-slider.jpg') }}" alt="" />
+                        <div class="carousel-inner">
+                            <div class="item active">
+                                <div class="col-sm-12  col-md-12">
+                                    <img class="img-responsive" src="{{ asset('images/home/record-store-slider.jpg') }}"
+                                         alt=""/>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="col-sm-12  col-md-12">
+                                    <img class="img-responsive" src="{{ asset('images/home/vinyl-records-slider.png') }}"
+                                         alt=""/>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div class="col-sm-12  col-md-12">
+                                    <img class="img-responsive" src="{{ asset('images/home/record-store-slider-3.jpg') }}"
+                                         alt=""/>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-
-                </div>
-            </div>
-        </section><!--/slider-->
-
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="left-sidebar">
-                            <div class="categories_products"><!--categories_products-->
-                                <h2>Categories</h2>
-                                <div class="categories-name">
-                                    <ul class="nav nav-pills nav-stacked">
-                                        <li><a href="#"> <span class="pull-right">(50)</span>Alternative</a></li>
-                                        <li><a href="#"> <span class="pull-right">(56)</span>Blues</a></li>
-                                        <li><a href="#"> <span class="pull-right">(27)</span>Classical</a></li>
-                                        <li><a href="#"> <span class="pull-right">(32)</span>Heavy Metal</a></li>
-                                        <li><a href="#"> <span class="pull-right">(5)</span>Jazz</a></li>
-                                        <li><a href="#"> <span class="pull-right">(4)</span>Pop</a></li>
-                                        <li><a href="#"> <span class="pull-right">(9)</span>Rock</a></li>
-                                    </ul>
-                                </div>
-                            </div><!--/categories_products-->
-                        </div>
-                    </div>
-
-                    <div class="col-sm-9 padding-right">
-                        <div class="features_items"><!--features_items-->
-                            <h2 class="title text-center">Features Items</h2>
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="{{ asset('images/home/the-beatles-help.jpg') }}" alt="" />
-                                            <h2>$56</h2>
-                                            <p>The Beatles - Help (1965)</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>$56</h2>
-                                                <p>The Beatles - Help (1965)</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="{{ asset('images/home/the-beatles-abbey-road.jpg') }}" alt="" />
-                                            <h2>$47</h2>
-                                            <p>The Beatles - Abbey Road (1969)</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>$47</h2>
-                                                <p>The Beatles - Abbey Road (1969)</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="{{ asset('images/home/the-beatles-revolver.jpg') }}" alt="" />
-                                            <h2>$39</h2>
-                                            <p>The Beatles - Revolver (1966)</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>$39</h2>
-                                                <p>The Beatles - Revolver (1966)</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="{{ asset('images/home/the-beatles-one.jpg') }}" alt="" />
-                                            <h2>$69</h2>
-                                            <p>The Beatles - One (2000)</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>$69</h2>
-                                                <p>The Beatles - One (2000)</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                            </div>
-                                        </div>
-                                        <img src="{{ asset('images/home/new.png') }}" class="new" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="{{ asset('images/home/the-doors-the-doors.jpg') }}" alt="" />
-                                            <h2>$43</h2>
-                                            <p>The Doors - The Doors (1967)</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>$43</h2>
-                                                <p>The Doors - The Doors (1967)</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                            </div>
-                                        </div>
-                                        <img src="{{ asset('images/home/sale.png') }}" class="new" alt="" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-4">
-                                <div class="product-image-wrapper">
-                                    <div class="single-products">
-                                        <div class="productinfo text-center">
-                                            <img src="{{ asset('images/home/metallica-master-of-puppets.jpg') }}" alt="" />
-                                            <h2>$62</h2>
-                                            <p>Metallica - Master Of Puppets (1986)</p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                        </div>
-                                        <div class="product-overlay">
-                                            <div class="overlay-content">
-                                                <h2>$62</h2>
-                                                <p>Metallica - Master Of Puppets (1986)</p>
-                                                <a href="#" class="btn btn-default add-to-cart"><i class="fa fa-shopping-cart"></i>Add to cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div><!--features_items-->
-
+                        <a href="#slider-carousel" class="left control-carousel hidden-xs" data-slide="prev">
+                            <i class="fa fa-angle-left"></i>
+                        </a>
+                        <a href="#slider-carousel" class="right control-carousel hidden-xs" data-slide="next">
+                            <i class="fa fa-angle-right"></i>
+                        </a>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+
+    </section><!--/slider-->
+    <section>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3">
+                    <div class="left-sidebar">
+                        <div class="categories_products"><!--categories_products-->
+                            <h2>Categories</h2>
+                            <div class="categories-name">
+                                <div class="list-group">
+                                    {% for category in categories %}
+                                        <a class="list-group-item">{{ category.name }}
+                                            <span class="badge">{{ category.products.count }}</span>
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div><!--/categories_products-->
+                    </div>
+                </div>
+
+                <div class="col-sm-9 padding-right">
+                    <div class="features_items"><!--features_items-->
+                        <h2 class="title text-center">Features Items</h2>
+                        {% for product in products %}
+                            <div class="col-sm-4">
+                                <div class="product-image-wrapper">
+                                    <div class="single-products">
+                                        <div class="productinfo text-center">
+                                            <a href="{{ path('product_show', { 'id': product.id }) }}">
+                                                <img src="/images/product/{{ product.image }}" alt=""/>
+                                            </a>
+                                            <h2>€{{ product.price }}</h2>
+                                            <p>
+                                                <a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.artist }}
+                                                    - {{ product.title }}</a></p>
+                                            <a href="#" class="btn btn-default add-to-cart"><i
+                                                        class="fa fa-shopping-cart"></i>Add to
+                                                cart</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div><!--features_items-->
+
+                </div>
+            </div>
+        </div>
+    </section>
 
 
 {% endblock %}

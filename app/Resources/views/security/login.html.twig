@@ -1,17 +1,18 @@
 {% extends '::base.html.twig' %}
 
 {% block body %}
-    {% if error %}
+    {#{% if error %}
         <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-    {% endif %}
+    {% endif %}#}
 
     <div class="container">
         <div class="row">
-            <div class="col-sm-4 col-sm-offset-4">
+            <div class="col-sm-4 col-sm-offset-3">
                 <div class="login-form"><!--login form-->
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <h2>Login: </h2>
+                            <h4>If you have an account, sign in with your username or email address.</h4>
                             <form action="{{ path('user_login') }}" method="post">
                                 <div class="form-group">
                                     <label for="username"></label>
@@ -23,8 +24,9 @@
                                     <input type="password" class="form-control" id="password" name="_password"
                                            placeholder="Password"/>
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group col-sm-offset-3">
                                     <button type="submit" class="btn btn-primary center-block">Login</button>
+                                    <a href="{{ path("homepage") }}" class="btn btn-primary center-block">Cancel</a>
                                 </div>
                             </form>
                         </div>

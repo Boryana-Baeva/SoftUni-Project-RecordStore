@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="col-md-9 col-md-offset-2 col-sm-12 col-sm-offset-1">
+        <div class="product-details"><!--product-details-->
+            <div class="col-md-4 col-sm-5">
+                <div class="view-product">
+                    <img class="img-responsive" src="/images/product/{{ product.image }}" alt=""/>
+                </div>
+            </div>
+
+            <div class="col-sm-7">
+                <div class="product-information"><!--/product-information-->
+                    <h2>{{ product.title }}</h2>
+                    <div><img src="{{ asset('images/product-details/rating.png') }}" alt=""/></div>
+								<span>
+									<span>€{{ product.price }}</span>
+									<label>Quantity:</label>
+									<input type="number" value="1"/>
+									<button type="button" class="btn btn-fefault cart">
+										<i class="fa fa-shopping-cart"></i>
+										Add to cart
+									</button>
+								</span>
+                    <p><b>Artist:</b> {{ product.artist }}</p>
+                    <p><b>Year of Release:</b> {{ product.yearOfRelease }}</p>
+                    <p><b>Genre:</b> {{ product.category.name }}</p>
+                    {% if product.stock > 0 %}
+                        <p style="color: #66dd66"><b style="color: #696763">Availability: </b>{{ product.stock }} in stock</p>
+                    {% else %}
+                        <p style="color: #FF4518"><b style="color: #696763">Availability:</b> Out Of Stock</p>
+                    {% endif %}
+                    <p><b>Description:</b>
+                    <p>
+                        {{ product.description }}
+                    </p>
+
+                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                        <div id="edit-panel">
+                            <button type="button" class="btn btn-success">
+                                <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
+                            </button>
+                            {{ form_start(delete_form) }}
+                            <button class="btn btn-danger" type="submit" value="Delete">Delete
+                            </button>
+                            {{ form_end(delete_form) }}
+                            <button type="button" class="btn btn-info">
+                                <a href="{{ path('product_index') }}">See All</a>
+                            </button>
+                        </div>
+                    {% endif %}
+                </div><!--/product-information-->
+
+            </div>
+        </div><!--/product-details-->
+    </div>
+
+{% endblock %}

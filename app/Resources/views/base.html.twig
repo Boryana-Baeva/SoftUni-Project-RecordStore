@@ -14,6 +14,10 @@
         <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
     {% endblock %}
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}"/>
+    {% block scripts %}
+        <script src="{{ asset('js/jquery-3.1.1.min.js') }}"></script>
+        <script src="{{ asset('js/bootstrap.js') }}"></script>
+    {% endblock %}
 </head>
 <body>
 {% block header %}
@@ -68,8 +72,6 @@
                                 <li><a href="{{ path("homepage") }}" class="active">Home</a></li>
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="#">Products</a></li>
-                                        <li><a href="#">Product Details</a></li>
                                         <li><a href="#">Checkout</a></li>
                                         <li><a href="#">Cart</a></li>
                                         <li><a href="{{ path("user_login") }}">Login</a></li>
@@ -84,6 +86,27 @@
         </div><!--/header-bottom-->
     </header><!--/header-->
 {% endblock %}
+{% if app.session.flashBag.has('success') %}
+    <div class="container">
+        {% for message in app.session.flashBag.get('success') %}
+            <div class="alert alert-success alert-dismissable">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% if app.session.flashBag.has('error') %}
+    <div class="container">
+        {% for message in app.session.flashBag.get('error') %}
+            <div class="alert alert-danger alert-dismissable col-sm-6 col-sm-offset-3">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 {% block body %}{% endblock %}
 {#{% block footer %}
     <footer id="footer"><!--Footer-->
@@ -140,3 +163,4 @@
 {% block javascripts %}{% endblock %}
 </body>
 </html>
+

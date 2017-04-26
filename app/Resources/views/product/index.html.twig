@@ -1,0 +1,58 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Products list</h1>
+
+    <table>
+        <thead>
+        <tr>
+            <th>Cover</th>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Year Of Release</th>
+            <th>Genre</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Description</th>
+            <th>Date Created</th>
+            <th>Date Updated</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td><a href="{{ path('product_show', { 'id': product.id }) }}">
+                        <img src="/images/product/{{ product.image }}" style="width: 50px;">
+                    </a>
+                </td>
+                <td>{{ product.title }}</td>
+                <td>{{ product.artist }}</td>
+                <td>{{ product.yearOfRelease }}</td>
+                <td>{{ product.category.name }}</td>
+                <td>€{{ product.price }}</td>
+                <td>{{ product.stock }}</td>
+                <td>{{ product.description }}</td>
+                <td>{% if product.dateCreated %}{{ product.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>{% if product.dateUpdated %}{{ product.dateUpdated|date('Y-m-d H:i:s') }}{% endif %}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('product_show', { 'id': product.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+
+        {% endfor %}
+        </tbody>
+    </table>
+    <ul>
+        <li>
+            <a href="{{ path('product_new') }}">Create a new product</a>
+        </li>
+    </ul>
+{% endblock %}

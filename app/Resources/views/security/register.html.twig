@@ -2,17 +2,20 @@
 
 {% block body %}
     <div class="container">
-        <div class="col-sm-4 col-sm-offset-4">
+        <div class="col-sm-3 col-sm-offset-3">
             <div class="register-form">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h2>Register:</h2>
+                        <h2>Create Account</h2>
+                        <h4>Fill in the fields below to create a new account.<br>
+                            If you already have an account, please <a href="{{ path('user_login') }}">Sign in</a></h4>
                         {{ form_start(form) }}
                         {{ form_widget(form) }}
-                        {{ form_end(form) }}
-                        <div class="form-group">
+                        <div class="form-group col-sm-offset-3">
                             <button type="submit" class="btn btn-primary center-block">Register</button>
+                            <a href="{{ path("homepage") }}" class="btn btn-primary center-block">Cancel</a>
                         </div>
+                        {{ form_end(form) }}
                     </div>
                 </div>
             </div>
