@@ -31,6 +31,17 @@ class SecurityController extends Controller
         // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
+        if($error){
+            $this->addFlash(
+                'error',
+                'Login unsuccessful! Please try again.'
+            );
+        } /*else{
+            $this->addFlash(
+                'success',
+                'Welcome! You have successfully logged in.'
+            );
+        }*/
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -86,6 +97,10 @@ class SecurityController extends Controller
 
             $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
             $this->get('security.token_storage')->setToken($token);
+            $this->addFlash(
+                'success',
+                'Congratulations! You registered successfully!'
+            );
             return $this->redirectToRoute("homepage");
         }
 

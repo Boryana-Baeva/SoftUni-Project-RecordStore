@@ -16,13 +16,16 @@ class UserType extends AbstractType
     {
         $builder->add('username', TextType::class, [
             'attr' => [
+
                 'placeholder' => "Username",
 
             ],
             'label' => false
+
         ])
             ->add('email', EmailType::class, [
                 'attr' => [
+
                     'placeholder' => "Email Address"
                 ],
                 'label' => false
@@ -40,7 +43,6 @@ class UserType extends AbstractType
                     'label' => false,
                     'attr' => ['placeholder' => 'Confirm password']
                 ]
-
             ])
             ->add('firstName', TextType::class, [
                 'attr' => [

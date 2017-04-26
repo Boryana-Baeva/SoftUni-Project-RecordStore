@@ -2,6 +2,7 @@
 
 namespace RecordStoreBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -30,7 +31,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="username", type="string", length=255, unique=true)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Username cannot be empty")
      */
     private $username;
 
@@ -39,7 +40,7 @@ class User implements UserInterface
      *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      * @Assert\Email()
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Email cannot be empty")
      */
     private $email;
 
@@ -53,7 +54,7 @@ class User implements UserInterface
     /**
      * @var string
      * @Assert\NotBlank()
-     * @Assert\Length(min="6")
+     * @Assert\Length(min="6", minMessage="Password must be at least 6 characters")
      */
     private $rawPassword;
 
@@ -61,7 +62,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="firstName", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Please fill in your first name")
      */
     private $firstName;
 
@@ -69,7 +70,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="lastName", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Please fill in your last name")
      */
     private $lastName;
 
@@ -77,7 +78,7 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="phoneNumber", type="string", length=255)
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Please fill in your phone number")
      */
     private $phoneNumber;
 
@@ -85,6 +86,11 @@ class User implements UserInterface
      * @ORM\Column(name="role", type="string", length=255)
      */
     private $role;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\Product", mappedBy="user")
+     */
+    private $products;
 
     /**
      * Get id
@@ -255,6 +261,30 @@ class User implements UserInterface
     {
         $this->rawPassword = $rawPassword;
     }
+
+    /**
+     * @return Collection
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * @param mixed $products
+     */
+    public function setProducts($products)
+    {
+        $this->products = $products;
+    }
+
+    /**
+     * @param Product $product
+     */
+    public function addProduct($product){
+        $this->getProducts()->add($product);
+    }
+
 
     /**
      * Returns the roles granted to the user.
