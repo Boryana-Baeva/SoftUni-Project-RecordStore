@@ -21,13 +21,15 @@
                             </div>
                             <div class="item">
                                 <div class="col-sm-12  col-md-12">
-                                    <img class="img-responsive" src="{{ asset('images/home/vinyl-records-slider.png') }}"
+                                    <img class="img-responsive"
+                                         src="{{ asset('images/home/vinyl-records-slider.png') }}"
                                          alt=""/>
                                 </div>
                             </div>
                             <div class="item">
                                 <div class="col-sm-12  col-md-12">
-                                    <img class="img-responsive" src="{{ asset('images/home/record-store-slider-3.jpg') }}"
+                                    <img class="img-responsive"
+                                         src="{{ asset('images/home/record-store-slider-3.jpg') }}"
                                          alt=""/>
                                 </div>
                             </div>
@@ -54,21 +56,35 @@
                             <div class="categories-name">
                                 <div class="list-group">
                                     {% for category in categories %}
-                                        <a class="list-group-item">{{ category.name }}
+                                        <a href="{{ path('products_categorized', { 'category': category.id }) }}"
+                                           class="list-group-item">{{ category.name }}
                                             <span class="badge">{{ category.products.count }}</span>
                                         </a>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div><!--/categories_products-->
+
+                        <div class="artists_products"><!--artists_products-->
+                            <h2>Artists</h2>
+                            <div class="categories-name">
+                                <div class="list-group">
+                                    {% for artist in artists %}
+                                        <a href="{{ path('products_by_artists', { 'artist': artist }) }}"
+                                           class="list-group-item">{{ artist }}
+                                        </a>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div><!--/artists_products-->
                     </div>
                 </div>
 
                 <div class="col-sm-9 padding-right">
                     <div class="features_items"><!--features_items-->
                         <h2 class="title text-center">Features Items</h2>
-                        {% for product in products %}
-                            <div class="col-sm-4">
+                        {% for product in pagination %}
+                            <div class="col-sm-4 col-md-4">
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
                                         <div class="productinfo text-center">
@@ -88,8 +104,10 @@
                             </div>
                         {% endfor %}
                     </div><!--features_items-->
-
                 </div>
+            </div>
+            <div class="col-md-6 col-md-offset-6">
+                {{ knp_pagination_render(pagination) }}
             </div>
         </div>
     </section>

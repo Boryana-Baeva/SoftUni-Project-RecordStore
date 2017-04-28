@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div class="col-md-9 col-md-offset-2 col-sm-12 col-sm-offset-1">
+        <div class="product-details"><!--user-details-->
+            {#<div class="col-md-4 col-sm-5">
+                <div class="view-product">
+                    <img class="img-responsive" src="/images/product/{{ product.image }}" alt=""/>
+                </div>
+            </div>#}
+
+            <div class="col-sm-7">
+                <div class="product-information"><!--/user-info-->
+                    <h2>{{ user.username }}</h2>
+                    <p><b>Name:</b>
+                        {{ user.firstName ~ ' ' ~ user.lastName}}
+                    </p>
+                    <p><b>Email Address:</b>
+                        {{ user.email }}
+                    </p>
+                    <p><b>Phone Number:</b>
+                        {{ user.phoneNumber }}
+                    </p>
+
+
+                    {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                        <div id="edit-panel">
+                            <button type="button" class="btn btn-success">
+                                <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
+                            </button>
+                            {{ form_start(delete_form) }}
+                            <button class="btn btn-danger" type="submit" value="Delete">Delete
+                            </button>
+                            {{ form_end(delete_form) }}
+                            <button type="button" class="btn btn-info">
+                                <a href="{{ path('product_index') }}">See All</a>
+                            </button>
+                        </div>
+                    {% endif %}#}
+                </div><!--/user-info-->
+            </div>
+        </div><!--/user-details-->
+    </div>
+
+{% endblock %}

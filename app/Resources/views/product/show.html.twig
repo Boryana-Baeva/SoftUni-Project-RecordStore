@@ -17,23 +17,27 @@
 								<span>
 									<span>€{{ product.price }}</span>
 									<label>Quantity:</label>
-									<input type="number" value="1"/>
+									<input title="" type="number" value="1"/>
 									<button type="button" class="btn btn-fefault cart">
 										<i class="fa fa-shopping-cart"></i>
 										Add to cart
 									</button>
 								</span>
-                    <p><b>Artist:</b> {{ product.artist }}</p>
+                    <p><b>Artist:</b>
+                        <a href="#{#{{ path('products_by_artists', { 'artist': product.artist }) }}#}">{{ product.artist }}</a>
+                    </p>
                     <p><b>Year of Release:</b> {{ product.yearOfRelease }}</p>
-                    <p><b>Genre:</b> {{ product.category.name }}</p>
-                    {% if product.stock > 0 %}
-                        <p style="color: #66dd66"><b style="color: #696763">Availability: </b>{{ product.stock }} in stock</p>
+                    <p><b>Genre:</b>
+                        <a href="{{ path('products_categorized', { 'category': product.category.id }) }}">{{ product.category.name }}</a>
+                    </p>
+                    {% if product.stock.quantity > 0 %}
+                        <p style="color: #66dd66"><b style="color: #696763">Availability: </b>{{ product.stock.quantity}} in stock</p>
                     {% else %}
                         <p style="color: #FF4518"><b style="color: #696763">Availability:</b> Out Of Stock</p>
                     {% endif %}
                     <p><b>Description:</b>
                     <p>
-                        {{ product.description }}
+                        {{ product.description|nl2br }}
                     </p>
 
                     {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}

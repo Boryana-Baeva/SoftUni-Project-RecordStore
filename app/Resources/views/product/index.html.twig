@@ -20,7 +20,7 @@
         </tr>
         </thead>
         <tbody>
-        {% for product in products %}
+        {% for product in pagination %}
             <tr>
                 <td><a href="{{ path('product_show', { 'id': product.id }) }}">
                         <img src="/images/product/{{ product.image }}" style="width: 50px;">
@@ -31,7 +31,7 @@
                 <td>{{ product.yearOfRelease }}</td>
                 <td>{{ product.category.name }}</td>
                 <td>€{{ product.price }}</td>
-                <td>{{ product.stock }}</td>
+                <td>{{ product.stock.quantity }}</td>
                 <td>{{ product.description }}</td>
                 <td>{% if product.dateCreated %}{{ product.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</td>
                 <td>{% if product.dateUpdated %}{{ product.dateUpdated|date('Y-m-d H:i:s') }}{% endif %}</td>
@@ -55,4 +55,7 @@
             <a href="{{ path('product_new') }}">Create a new product</a>
         </li>
     </ul>
+    <div class="col-md-6 col-md-offset-6">
+        {{ knp_pagination_render(pagination) }}
+    </div>
 {% endblock %}
