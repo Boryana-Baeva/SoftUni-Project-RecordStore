@@ -3,6 +3,8 @@
 namespace RecordStoreBundle\Controller;
 
 use RecordStoreBundle\Entity\Product;
+use RecordStoreBundle\Entity\Stock;
+use RecordStoreBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -17,37 +19,56 @@ use Symfony\Component\Form\FormError;
  */
 class ProductController extends Controller
 {
+    const PAGE_LIMIT = 9;
+
     /**
      * Lists all product entities.
      *
      * @Route("/products", name="product_index")
      * @Method("GET")
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
 
         $products = $em->getRepository('RecordStoreBundle:Product')->findAll();
 
+        $paginator = $this->get('knp_paginator');
+        $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->createQueryBuilder('p')
+            ->select('p');
+
+        $pagination = $paginator->paginate(
+            $query->getQuery(),
+            $request->query->getInt('page', 1),
+            self::PAGE_LIMIT
+        );
+
         return $this->render('product/index.html.twig', array(
+            'pagination' => $pagination,
             'products' => $products,
             'user' => $this->getUser()
         ));
     }
-
+    
     /**
      * Creates a new product entity.
      *
      * @Route("/new", name="product_new")
      * @Method({"GET", "POST"})
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      */
     public function newAction(Request $request)
     {
-        $product = new Product();
-        $form = $this->createForm('RecordStoreBundle\Form\ProductType', $product);
-        $form->handleRequest($request);
+        $stock = new Stock();
+        $formCreate = $this->createForm('RecordStoreBundle\Form\StockProductType', $stock);
+        $formCreate->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
+        if ($formCreate->isSubmitted() && $formCreate->isValid()) {
+
+            $product = $stock->getProduct();
 
             $product->setDateCreated(new \DateTime());
             $product->setDateUpdated(new \DateTime());
@@ -58,7 +79,7 @@ class ProductController extends Controller
             $file = $product->getImageForm();
 
             if (!$file) {
-                $form->get('image_form')->addError(new FormError('Image is required'));
+                $formCreate->get('image_form')->addError(new FormError('Image is required'));
             } else {
                 $filename = md5($product->getTitle() . '' . $product->getArtist() . '' . $product->getDateCreated()->format('Y-m-d H:i:s'));
 
@@ -71,6 +92,8 @@ class ProductController extends Controller
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($product);
+                $em->persist($stock);
+
                 $em->flush();
 
                 $this->addFlash('success', 'Product is created successfully!');
@@ -78,11 +101,10 @@ class ProductController extends Controller
                 return $this->redirectToRoute('product_show', array('id' => $product->getId()));
             }
         }
-        return $this->render('product/new.html.twig', array(
-            'product' => $product,
-            'form' => $form->createView(),
-            'user' => $this->getUser()
-        ));
+        return $this->render('product/new.html.twig', [
+            'user' => $this->getUser(),
+            'formCreate' => $formCreate->createView(),
+        ]);
 
     }
 
@@ -95,11 +117,20 @@ class ProductController extends Controller
     public function showAction(Product $product)
     {
         $deleteForm = $this->createDeleteForm($product);
+        /**
+         * @var User $user
+         */
+        if ($this->getUser()) {
+            if ($product->getStock()->getQuantity() < 1 &&
+                 $this->getUser()->getRole() == 'ROLE_USER') {
 
-        if($product->getStock() < 1){
-            $this->addFlash('error', 'Product is out of stock!');
-            return $this->redirectToRoute('product_index', array('id' => $product->getId()));
+                $this->addFlash('error', 'Product is out of stock!');
+                return $this->redirectToRoute('homepage', array('id' => $product->getId()));
+            }
+        } else{
+            return $this->redirectToRoute('user_login', array('id' => $product->getId()));
         }
+
 
         return $this->render('product/show.html.twig', array(
             'product' => $product,
@@ -116,14 +147,15 @@ class ProductController extends Controller
      */
     public function editAction(Request $request, Product $product)
     {
+
         $deleteForm = $this->createDeleteForm($product);
-        $editForm = $this->createForm('RecordStoreBundle\Form\ProductType', $product);
+        $stock = $product->getStock();
+        $editForm = $this->createForm('RecordStoreBundle\Form\StockProductType', $stock);
         $editForm->handleRequest($request);
 
         if ($editForm->isSubmitted() && $editForm->isValid()) {
 
             $product->setDateUpdated(new \DateTime());
-
 
             if ($product->getImageForm() instanceof UploadedFile) {
                 /** @var UploadedFile $file */
@@ -162,13 +194,17 @@ class ProductController extends Controller
      */
     public function deleteAction(Request $request, Product $product)
     {
+        $stock = $product->getStock();
         $form = $this->createDeleteForm($product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
+            $em->remove($stock);
             $em->remove($product);
             $em->flush();
+
+            $this->addFlash('success', 'Product is deleted successfully!');
         }
 
         return $this->redirectToRoute('product_index');
@@ -187,5 +223,74 @@ class ProductController extends Controller
             ->setAction($this->generateUrl('product_delete', array('id' => $product->getId())))
             ->setMethod('DELETE')
             ->getForm();
+    }
+
+    /**
+     * @Route("/category/{category}", name="products_categorized")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function categoryAction($category, Request $request)
+    {
+        $cat = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:Category')
+            ->find($category);
+
+        $categories = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:Category')
+            ->findAll();
+        sort($categories);
+
+        $artists = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:Product')
+            ->fetchArtists();
+
+        $paginator = $this->get('knp_paginator');
+        $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->findByCategory($cat);
+
+        $pagination =  $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            self::PAGE_LIMIT
+        );
+
+        return $this->render('product/list.html.twig', array(
+            'category' => $cat,
+            'categories' => $categories,
+            'artists' => $artists,
+            'pagination' => $pagination,
+            'user' => $this->getUser()
+        ));
+    }
+
+    /**
+     * @Route("/artist/{artist}", name="products_by_artists")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function artistAction($artist, Request $request)
+    {
+        $categories = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:Category')
+            ->findAll();
+
+        $artists = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:Product')
+            ->fetchArtists();
+
+        $paginator = $this->get('knp_paginator');
+        $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->findByArtist($artist);
+
+        $pagination =  $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            self::PAGE_LIMIT
+        );
+
+        return $this->render('product/list-by-artist.html.twig', array(
+            'artist' => $artist,
+            'artists' => $artists,
+            'categories' => $categories,
+            'pagination' => $pagination,
+            'user' => $this->getUser()
+        ));
     }
 }

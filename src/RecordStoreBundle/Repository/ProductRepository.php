@@ -1,6 +1,7 @@
 <?php
 
 namespace RecordStoreBundle\Repository;
+use RecordStoreBundle\Entity\Product;
 
 /**
  * ProductRepository
@@ -10,4 +11,54 @@ namespace RecordStoreBundle\Repository;
  */
 class ProductRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function findByCategory($category)
+    {
+        $qb  = $this->createQueryBuilder('p');
+        $qb->select('p')
+            ->join('p.stock', 's')
+            ->where($qb->expr()->eq('p.category', ':category'))
+            ->andWhere($qb->expr()->gt('s.quantity', 0))
+            ->setParameters([
+                'category' => $category
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function fetchAvailable(){
+        $qb  = $this->createQueryBuilder('p');
+        $qb->select('p')
+            ->join('p.stock', 's')
+            ->where($qb->expr()->gt('s.quantity', 0));
+
+        return $qb->getQuery()->getResult();
+    }
+
+    public function fetchArtists(){
+
+        $products = $this->findAll();
+        $artists = [];
+        foreach ($products as $product){
+            /**
+             * @var Product $product
+             */
+            $artists[] = $product->getArtist();
+        }
+        sort($artists);
+        return array_unique($artists);
+    }
+
+    public function findByArtist($artist)
+    {
+        $qb  = $this->createQueryBuilder('p');
+        $qb->select('p')
+            ->join('p.stock', 's')
+            ->where($qb->expr()->eq('p.artist', ':artist'))
+            ->andWhere($qb->expr()->gt('s.quantity', 0))
+            ->setParameters([
+                'artist' => $artist
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
 }

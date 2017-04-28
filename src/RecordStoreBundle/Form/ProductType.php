@@ -2,18 +2,11 @@
 
 namespace RecordStoreBundle\Form;
 
-use Doctrine\DBAL\Types\DecimalType;
-use Doctrine\ORM\EntityManager;
 use RecordStoreBundle\Entity\Category;
-use RecordStoreBundle\Entity\User;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Bundle\FrameworkBundle\Command\CacheClearCommand;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -40,15 +33,17 @@ class ProductType extends AbstractType
                 'label' => 'Genre'
             ])
             ->add('description', TextareaType::class, [
-                'required' => false
+                'required' => false,
+                'attr' => [
+                    'rows' => 15
+                ]
             ])
             ->add('image_form', FileType::class, [
                 'data_class' => null,
                 'required' => false,
                 'label' => 'Album Cover'
             ])
-            ->add('price', MoneyType::class)
-            ->add('stock', IntegerType::class);
+            ->add('price', MoneyType::class);
     }
 
     /**

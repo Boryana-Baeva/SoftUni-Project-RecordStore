@@ -84,9 +84,9 @@ class Product
     private $price;
 
     /**
-     * @var int
+     * @var Stock
      *
-     * @ORM\Column(name="stock", type="integer")
+     * @ORM\OneToOne(targetEntity="RecordStoreBundle\Entity\Stock", mappedBy="product")
      */
     private $stock;
 
@@ -269,7 +269,7 @@ class Product
     /**
      * Set stock
      *
-     * @param integer $stock
+     * @param Stock $stock
      *
      * @return Product
      */
@@ -283,12 +283,13 @@ class Product
     /**
      * Get stock
      *
-     * @return int
+     * @return Stock
      */
     public function getStock()
     {
         return $this->stock;
     }
+
 
     /**
      * Set dateCreated
@@ -353,7 +354,6 @@ class Product
     {
         $this->image_form = $image_form;
     }
-
 
     /**
      * @return User
