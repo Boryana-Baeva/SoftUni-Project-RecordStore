@@ -13,8 +13,27 @@
             <div class="col-sm-7">
                 <div class="product-information"><!--/user-info-->
                     <h2>{{ user.username }}</h2>
+                    <div class="avatar-container">
+                        {% if user.avatar %}
+
+                            <img src="{{ user.avatar.url }}" class="img-responsive img-rounded">
+                        {% else %}
+                            <img src="{{ asset('images/avatar/no-avatar-image.jpg') }}"
+                                 class="img-responsive img-rounded">
+                        {% endif %}
+                    </div>
+                    {% if app.user is same as(user) %}
+                        {{ form_start(avatar_form) }}
+
+                        {{ form_widget(avatar_form) }}
+
+                        <a href="{{ path('avatar_upload', {'id' : user.id}) }}"><input type="submit" value="Upload"></a>
+
+                        {{ form_end(avatar_form) }}
+                    {% endif %}
+
                     <p><b>Name:</b>
-                        {{ user.firstName ~ ' ' ~ user.lastName}}
+                        {{ user.firstName ~ ' ' ~ user.lastName }}
                     </p>
                     <p><b>Email Address:</b>
                         {{ user.email }}
@@ -24,20 +43,26 @@
                     </p>
 
 
-                    {#{% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
-                        <div id="edit-panel">
+                    <div id="edit-panel">
+                        {% if app.user is same as(user) or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
                             <button type="button" class="btn btn-success">
-                                <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
+                                <a href="{{ path('profile_edit', { 'id': user.id }) }}">Edit Profile</a>
                             </button>
-                            {{ form_start(delete_form) }}
-                            <button class="btn btn-danger" type="submit" value="Delete">Delete
+                        {% endif %}
+
+                        {% if app.user is same as(user) %}
+
+                            <button type="button" class="btn btn-success">
+                                <a href="{{ path('change_password', { 'id': user.id }) }}">Change Password</a>
                             </button>
-                            {{ form_end(delete_form) }}
-                            <button type="button" class="btn btn-info">
-                                <a href="{{ path('product_index') }}">See All</a>
+
+                            {{ form_start(delete_account_form) }}
+                            <button class="btn btn-danger" type="submit" value="Delete">Delete Account
                             </button>
-                        </div>
-                    {% endif %}#}
+                            {{ form_end(delete_account_form) }}
+
+                        {% endif %}
+                    </div>
                 </div><!--/user-info-->
             </div>
         </div><!--/user-details-->

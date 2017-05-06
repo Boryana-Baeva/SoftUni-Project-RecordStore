@@ -83,14 +83,25 @@
                     <div class="features_items"><!--features_items-->
                         <h2 class="title text-center">{{ artist }}</h2>
                         {% for product in pagination %}
+                            {% set promotional_price = calculator.calculate(product) %}
                             <div class="col-sm-4">
                                 <div class="product-image-wrapper">
                                     <div class="single-products">
                                         <div class="productinfo text-center">
+                                            {% if promotional_price != product.price %}
+                                                <span class="discount" id="homepage-discount">{{ calculator.relevantPromotion }}% OFF</span>
+                                            {% endif %}
                                             <a href="{{ path('product_show', { 'id': product.id }) }}">
                                                 <img src="/images/product/{{ product.image }}" alt=""/>
                                             </a>
-                                            <h2>€{{ product.price }}</h2>
+
+                                            {% if promotional_price != product.price %}
+                                                <h2>
+                                                    <del>€{{ product.price | number_format(2) }}</del>
+                                                </h2>
+                                            {% endif %}
+                                            <h2>€{{ promotional_price | number_format(2) }}</h2>
+
                                             <p>
                                                 <a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.artist }}
                                                     - {{ product.title }}</a></p>

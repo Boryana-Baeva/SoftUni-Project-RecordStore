@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1 style="text-align: center">Profile edit</h1>
+    <div class="container">
+        <div class="col-sm-6 col-sm-offset-3">
+            {{ form_start(edit_profile_form) }}
+            {{ form_widget(edit_profile_form) }}
+            <input type="submit" value="Edit"/>
+            {{ form_end(edit_profile_form) }}
+
+            {#<ul>
+                <li>
+                    <a href="{{ path('product_index') }}">Back to the list</a>
+                </li>
+                <li>
+                    {{ form_start(delete_form) }}
+                    <input type="submit" value="Delete">
+                    {{ form_end(delete_form) }}
+                </li>
+            </ul>#}
+        </div>
+    </div>
+{% endblock %}
+

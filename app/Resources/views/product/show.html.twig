@@ -1,13 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% set promotional_price = calculator.calculate(product) %}
 
     <div class="col-md-9 col-md-offset-2 col-sm-12 col-sm-offset-1">
         <div class="product-details"><!--product-details-->
             <div class="col-md-4 col-sm-5">
                 <div class="view-product">
-                    <img class="img-responsive" src="/images/product/{{ product.image }}" alt=""/>
+                    <img class="img-responsive img-rounded" src="/images/product/{{ product.image }}" alt=""/>
                 </div>
+                {% if promotional_price != product.price %}
+                <div class="sale">
+                    <img src="{{ asset('images/home/sale.png') }}">
+                </div>
+                    <span class="discount" id="show-discount">{{ calculator.relevantPromotion }}% OFF</span>
+                {% endif %}
             </div>
 
             <div class="col-sm-7">
@@ -15,7 +22,10 @@
                     <h2>{{ product.title }}</h2>
                     <div><img src="{{ asset('images/product-details/rating.png') }}" alt=""/></div>
 								<span>
-									<span>€{{ product.price }}</span>
+                                    {% if promotional_price != product.price %}
+                                        <span><del>€{{ product.price | number_format(2) }}</del></span>
+                                    {% endif %}
+                                    <span>€{{ promotional_price | number_format(2) }}</span>
 									<label>Quantity:</label>
 									<input title="" type="number" value="1"/>
 									<button type="button" class="btn btn-fefault cart">

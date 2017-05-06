@@ -40,8 +40,8 @@ security:
     access_control:
         - { path: ^/product/products , roles: [ROLE_ADMIN, ROLE_EDITOR] }
         - { path: ^/product/new , roles: [ROLE_ADMIN, ROLE_EDITOR] }
-        - { path: /edit , roles: [ROLE_ADMIN, ROLE_EDITOR] }
-        - { path: ^/product/id , roles: [ROLE_USER, ROLE_ADMIN, ROLE_EDITOR] }
+        - { path: /edit , roles: [ROLE_ADMIN, ROLE_EDITOR, ROLE_USER] }
+        - { path: ^/product/id , roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register , roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login , roles: IS_AUTHENTICATED_ANONYMOUSLY }
 

@@ -4,6 +4,17 @@ parameters:
     #parameter_name: value
 
 services:
-    #service_name:
-    #    class: RecordStoreBundle\Directory\ClassName
-    #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
+    app.image_uploader:
+        class:     RecordStoreBundle\Services\UploadService
+        arguments: ['%root_dir%']
+    repo.promotions:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - \RecordStoreBundle\Entity\Promotion
+    promotion_manager:
+        class:     RecordStoreBundle\Services\PromotionManager
+        arguments: ['@repo.promotions']
+    price_calculator:
+        class:     RecordStoreBundle\Services\PriceCalculator
+        arguments: ['@promotion_manager']
