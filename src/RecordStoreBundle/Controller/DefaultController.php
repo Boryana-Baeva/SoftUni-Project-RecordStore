@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    const PAGE_LIMIT = 9;
+    const PAGE_LIMIT = 12;
 
     /**
      * @Route("/", name="homepage")
@@ -32,12 +32,18 @@ class DefaultController extends Controller
             self::PAGE_LIMIT
         );
 
+        $calculator = $this->get('price_calculator');
+
+        $relevantPromotion = $calculator->getRelevantPromotion();
+
         return $this->render('default/index.html.twig', [
             'base_dir' => realpath($this->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
             'user' => $this->getUser(),
             'pagination' => $pagination,
             'categories' => $categories,
-            'artists' => $artists
+            'artists' => $artists,
+            'calculator' => $calculator,
+            'relevant_promotion' => $relevantPromotion
         ]);
     }
 }

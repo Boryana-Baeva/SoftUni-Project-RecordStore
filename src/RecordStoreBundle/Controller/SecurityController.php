@@ -14,6 +14,7 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SecurityController extends Controller
 {
+    const INITIAL_CASH = 100;
 
     /**
      * @Route("/login", name="user_login" )
@@ -91,6 +92,8 @@ class SecurityController extends Controller
                 $encoder->encodePassword($user, $user->getRawPassword())
             );
 
+            $user->setCash(self::INITIAL_CASH);
+            
             $em = $this->getDoctrine()->getManager();
             $em->persist($user);
             $em->flush();

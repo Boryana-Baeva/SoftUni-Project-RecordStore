@@ -2,6 +2,7 @@
 
 namespace RecordStoreBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -111,6 +112,10 @@ class Product
      */
     private $user;
 
+    /**
+     * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\CartOrder", mappedBy="user")
+     */
+    private $orders;
 
     /**
      * Get id
@@ -369,6 +374,29 @@ class Product
     public function setUser($user)
     {
         $this->user = $user;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param mixed $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
+    }
+
+    /**
+     * @param CartOrder $order
+     */
+    public function addOrder($order){
+        $this->getOrders()->add($order);
     }
 }
 

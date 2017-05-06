@@ -53,7 +53,7 @@ class User implements UserInterface
 
     /**
      * @var string
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(groups={"UserForm"})
      * @Assert\Length(min="6", minMessage="Password must be at least 6 characters")
      */
     private $rawPassword;
@@ -83,6 +83,21 @@ class User implements UserInterface
     private $phoneNumber;
 
     /**
+     * @var Image
+     *
+     * @ORM\OneToOne(targetEntity="RecordStoreBundle\Entity\Image",mappedBy="user")
+     * @ORM\JoinColumn(name="avatar",referencedColumnName="id")
+     *
+     */
+    private $avatar;
+
+    /**
+     * @Assert\Image(mimeTypes={"image/png", "image/jpeg"},
+     *               maxSize="5M", maxSizeMessage="Maximum file size is 5MB")
+     */
+    private $avatar_form; 
+
+    /**
      * @ORM\Column(name="role", type="string", length=255)
      */
     private $role;
@@ -91,6 +106,17 @@ class User implements UserInterface
      * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\Product", mappedBy="user")
      */
     private $products;
+
+    /**
+     *
+     * @ORM\Column(name="cash", type="decimal")
+     */
+    private $cash;
+
+    /**
+     * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\CartOrder", mappedBy="user")
+     */
+    private $orders;
 
     /**
      * Get id
@@ -247,6 +273,43 @@ class User implements UserInterface
     }
 
     /**
+     * @return Image
+     */
+    public function getAvatar()
+    {
+        return $this->avatar;
+    }
+
+    /**
+     * @param Image $avatar
+     * @return User
+     */
+    public function setAvatar($avatar)
+    {
+        $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAvatarForm()
+    {
+        return $this->avatar_form;
+    }
+
+    /**
+     * @param mixed $avatar_form
+     */
+    public function setAvatarForm($avatar_form)
+    {
+        $this->avatar_form = $avatar_form;
+    }
+
+
+
+    /**
      * @return string
      */
     public function getRawPassword()
@@ -336,6 +399,47 @@ class User implements UserInterface
     public function setRoles($roles){
         $this->setRole(implode(',', $roles));
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCash()
+    {
+        return $this->cash;
+    }
+
+    /**
+     * @param mixed $cash
+     */
+    public function setCash($cash)
+    {
+        $this->cash = $cash;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getOrders()
+    {
+        return $this->orders;
+    }
+
+    /**
+     * @param mixed $orders
+     */
+    public function setOrders($orders)
+    {
+        $this->orders = $orders;
+    }
+
+    /**
+     * @param CartOrder $order
+     */
+    public function addOrder($order){
+        $this->getOrders()->add($order);
+    }
+
+
     /**
      * Returns the salt that was originally used to encode the password.
      *
@@ -358,5 +462,6 @@ class User implements UserInterface
     {
         // TODO: Implement eraseCredentials() method.
     }
+
 }
 

@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormError;
  */
 class ProductController extends Controller
 {
-    const PAGE_LIMIT = 9;
+    const PAGE_LIMIT = 12;
 
     /**
      * Lists all product entities.
@@ -51,7 +51,7 @@ class ProductController extends Controller
             'user' => $this->getUser()
         ));
     }
-    
+
     /**
      * Creates a new product entity.
      *
@@ -117,25 +117,22 @@ class ProductController extends Controller
     public function showAction(Product $product)
     {
         $deleteForm = $this->createDeleteForm($product);
-        /**
-         * @var User $user
-         */
-        if ($this->getUser()) {
-            if ($product->getStock()->getQuantity() < 1 &&
-                 $this->getUser()->getRole() == 'ROLE_USER') {
 
-                $this->addFlash('error', 'Product is out of stock!');
-                return $this->redirectToRoute('homepage', array('id' => $product->getId()));
-            }
-        } else{
-            return $this->redirectToRoute('user_login', array('id' => $product->getId()));
+        if ($product->getStock()->getQuantity() < 1 &&
+            $this->getUser()->getRole() == 'ROLE_USER'
+        ) {
+
+            $this->addFlash('error', 'Product is out of stock!');
+            return $this->redirectToRoute('homepage', array('id' => $product->getId()));
         }
 
+        $calculator = $this->get('price_calculator');
 
         return $this->render('product/show.html.twig', array(
             'product' => $product,
             'delete_form' => $deleteForm->createView(),
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'calculator' => $calculator
         ));
     }
 
@@ -247,18 +244,21 @@ class ProductController extends Controller
         $paginator = $this->get('knp_paginator');
         $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->findByCategory($cat);
 
-        $pagination =  $paginator->paginate(
+        $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             self::PAGE_LIMIT
         );
+
+        $calculator = $this->get('price_calculator');
 
         return $this->render('product/list.html.twig', array(
             'category' => $cat,
             'categories' => $categories,
             'artists' => $artists,
             'pagination' => $pagination,
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'calculator' => $calculator
         ));
     }
 
@@ -279,18 +279,21 @@ class ProductController extends Controller
         $paginator = $this->get('knp_paginator');
         $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->findByArtist($artist);
 
-        $pagination =  $paginator->paginate(
+        $pagination = $paginator->paginate(
             $query,
             $request->query->getInt('page', 1),
             self::PAGE_LIMIT
         );
+
+        $calculator = $this->get('price_calculator');
 
         return $this->render('product/list-by-artist.html.twig', array(
             'artist' => $artist,
             'artists' => $artists,
             'categories' => $categories,
             'pagination' => $pagination,
-            'user' => $this->getUser()
+            'user' => $this->getUser(),
+            'calculator' => $calculator
         ));
     }
 }

@@ -20,7 +20,7 @@ class Category
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Product", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\Product", mappedBy="category")
      */
     private $id;
 
@@ -36,6 +36,10 @@ class Category
      */
     private $products;
 
+    /**
+     * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\Promotion", mappedBy="category")
+     */
+    private $promotions;
     /**
      * Get id
      *
@@ -92,5 +96,23 @@ class Category
     public function addProduct($product){
         $this->getProducts()->add($product);
     }
+
+    /**
+     * @return Collection
+     */
+    public function getPromotions()
+    {
+        return $this->promotions;
+    }
+
+    /**
+     * @param Collection $promotions
+     */
+    public function setPromotions($promotions)
+    {
+        $this->promotions = $promotions;
+    }
+    
+    
 }
 
