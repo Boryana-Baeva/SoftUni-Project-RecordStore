@@ -1,4 +1,4 @@
-﻿/*************************
+﻿﻿/*************************
 *******Typography******
 **************************/
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,300,400italic,500,700,100);
@@ -836,7 +836,7 @@ h2.title {
     border: 1px solid #F7F7F5;
     overflow: hidden;
     margin-bottom: 30px;
-    width: 280px;
+    width: 295px;
 }
 
 .single-products {
@@ -849,11 +849,20 @@ h2.title {
     right: 0;
 }
 
+.sale img{
+    width: 70px;
+    height:70px;
+}
+
 .productinfo h2 {
     color: #FE980F;
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     font-weight: 700;
+    display: inline-block;
+    margin-left: 10px;
+    margin-right: 10px;
+
 }
 
 .product-overlay h2 {
@@ -883,6 +892,7 @@ h2.title {
 }
 
 .productinfo {
+    height: 430px;
     position: relative;
 }
 
@@ -1153,7 +1163,7 @@ h2.title {
 }
 
 .view-product {
-    position: relative;
+    position: absolute;
     padding-top: 20px;
     padding-bottom: 60px;
 }
@@ -2533,4 +2543,42 @@ h2.title {
     margin: 0;
     padding: 0;
 }
+
+#user_upload_avatar{
+    position: relative;
+}
+
+.avatar-container img{
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    margin-bottom: 40px;
+    margin-top: 20px;
+}
+
+del{
+    color: #b5000c;
+}
+
+.discount {
+    background: #eb4800;
+    height: 7%;
+    display: inline-block;
+    padding: 3px 5px;
+    color: #fff;
+    float: left;
+    font-size: 15px;
+    font-weight: 300;
+    border-radius: 0 4px 4px 0;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+#homepage-discount{
+    position: absolute;
+}
+
+#show-discount{
+    position: relative;
+}
+
 
