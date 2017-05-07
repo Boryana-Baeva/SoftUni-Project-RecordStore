@@ -65,6 +65,12 @@ class CartOrder
      */
     private $createdOn;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="status", type="string")
+     */
+    private $status;
 
     /**
      * Get id
@@ -103,7 +109,7 @@ class CartOrder
     /**
      * Set product
      *
-     * @param string $product
+     * @param Product $product
      *
      * @return CartOrder
      */
@@ -117,7 +123,7 @@ class CartOrder
     /**
      * Get product
      *
-     * @return string
+     * @return Product
      */
     public function getProduct()
     {
@@ -189,7 +195,7 @@ class CartOrder
     /**
      * Get totalPrice
      *
-     * @return string
+     * @return float
      */
     public function getTotalPrice()
     {
@@ -218,6 +224,22 @@ class CartOrder
     public function getCreatedOn()
     {
         return $this->createdOn;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
     }
 }
 

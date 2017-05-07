@@ -90,7 +90,9 @@
                                     <div class="single-products">
                                         <div class="productinfo text-center">
                                             {% if promotional_price != product.price %}
-                                                <span class="discount" id="homepage-discount">{{ calculator.relevantPromotion }}% OFF</span>
+                                                <span class="discount"
+                                                      id="homepage-discount">{{ calculator.relevantPromotion }}
+                                                    % OFF</span>
                                             {% endif %}
                                             <a href="{{ path('product_show', { 'id': product.id }) }}">
                                                 <img src="/images/product/{{ product.image }}" alt=""/>
@@ -104,15 +106,20 @@
                                             <h2>€{{ promotional_price | number_format(2) }}</h2>
 
                                             <p>
-                                                <a href="{{ path('product_show', { 'id': product.id }) }}">{{ product.artist }}
-                                                    - {{ product.title }}</a></p>
-                                            <a href="#" class="btn btn-default add-to-cart"><i
-                                                        class="fa fa-shopping-cart"></i>Add to
-                                                cart</a>
+                                                <a href="{{ path('product_show', { 'id': product.id }) }}">
+                                                    {{ product.artist }} - {{ product.title }}
+                                                </a>
+                                            </p>
+                                            {% if app.user %}
+                                            <form method="post" action="{{ path('cart_add', {'id': product.id }) }}">
+                                                <button type="submit" class="btn btn-default add-to-cart">
+                                                    <i class="fa fa-shopping-cart"></i>Add to cart
+                                                </button>
+                                            </form>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         {% endfor %}
                     </div><!--features_items-->

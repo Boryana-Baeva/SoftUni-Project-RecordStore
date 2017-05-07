@@ -113,7 +113,9 @@ class Product
     private $user;
 
     /**
+     * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\CartOrder", mappedBy="product")
      * @ORM\OneToMany(targetEntity="RecordStoreBundle\Entity\CartOrder", mappedBy="user")
+     *
      */
     private $orders;
 
@@ -264,7 +266,7 @@ class Product
     /**
      * Get price
      *
-     * @return string
+     * @return float
      */
     public function getPrice()
     {

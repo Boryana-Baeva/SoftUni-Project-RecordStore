@@ -10,4 +10,20 @@ namespace RecordStoreBundle\Repository;
  */
 class CartOrderRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function fetchUsersOrdersByStatus($status, $user)
+    {
+        $qb  = $this->createQueryBuilder('o');
+        $qb->select('o')
+            ->join('o.user', 'u')
+            ->join('o.product', 'p')
+            ->where($qb->expr()->eq('o.status', ':status'))
+            ->andWhere($qb->expr()->eq('o.user', ':user'))
+            ->setParameters([
+                'status' => $status,
+                'user' => $user
+            ]);
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

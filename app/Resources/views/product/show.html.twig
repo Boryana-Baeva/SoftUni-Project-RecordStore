@@ -26,12 +26,16 @@
                                         <span><del>€{{ product.price | number_format(2) }}</del></span>
                                     {% endif %}
                                     <span>€{{ promotional_price | number_format(2) }}</span>
-									<label>Quantity:</label>
-									<input title="" type="number" value="1"/>
-									<button type="button" class="btn btn-fefault cart">
-										<i class="fa fa-shopping-cart"></i>
-										Add to cart
+
+                                    {% if app.user %}
+                                    <form method="post" action="{{ path('cart_add', {'id': product.id }) }}">
+                                        <label>Quantity:</label>
+									<input name="quantity" title="" type="number" value="1"/>
+									<button type="submit" class="btn btn-fefault cart">
+										<i class="fa fa-shopping-cart"></i>Add to cart
 									</button>
+                                    </form>
+                                    {% endif %}
 								</span>
                     <p><b>Artist:</b>
                         <a href="#{#{{ path('products_by_artists', { 'artist': product.artist }) }}#}">{{ product.artist }}</a>

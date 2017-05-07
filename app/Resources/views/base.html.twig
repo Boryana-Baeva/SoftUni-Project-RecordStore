@@ -39,7 +39,7 @@
                                                     class="fa fa-user"></i> {{ app.user.firstName ~ ' ' ~ app.user.lastName }}
                                         </a></li>
                                     <li><a href="#"><i class="fa fa-crosshairs"></i> Checkout</a></li>
-                                    <li><a href="{{ path("cart_index", { 'id': app.user.id }) }}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
+                                    <li><a href="{{ path("cart_index") }}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
                                     <li><a href="{{ path("user_logout") }}"><i class="fa fa-lock"></i> Logout</a>
                                     </li>
                                 {% else %}
@@ -72,8 +72,8 @@
                                 <li><a href="{{ path("homepage") }}" class="active">Home</a></li>
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="#">Checkout</a></li>
-                                        <li><a href="#">Cart</a></li>
+                                        <li><a href="{{ path('cart_checkout') }}">Checkout</a></li>
+                                        <li><a href="{{ path("cart_index") }}">Cart</a></li>
                                     </ul>
                                 </li>
                                 <li><a href="#">Contact</a></li>

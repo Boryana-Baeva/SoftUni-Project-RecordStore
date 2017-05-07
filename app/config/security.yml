@@ -38,6 +38,7 @@ security:
                 path: user_logout
 
     access_control:
+        - { path: /cart , roles: [ROLE_ADMIN, ROLE_EDITOR, ROLE_USER] }
         - { path: ^/product/products , roles: [ROLE_ADMIN, ROLE_EDITOR] }
         - { path: ^/product/new , roles: [ROLE_ADMIN, ROLE_EDITOR] }
         - { path: /edit , roles: [ROLE_ADMIN, ROLE_EDITOR, ROLE_USER] }

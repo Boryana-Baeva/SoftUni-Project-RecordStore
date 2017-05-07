@@ -11,7 +11,7 @@
                 </ol>
             </div>
             <span>
-                <h4>Cash Amount: €{{ app.user.cash | number_format(2)}}</h4>
+                <h4 >Cash Amount: €{{ app.user.cash | number_format(2)}}</h4>
             </span>
             <div class="table-responsive cart_info">
                 <table class="table table-condensed">
@@ -26,7 +26,6 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% set total_price = 0 %}
                     {% for order in orders %}
                         {% set promotional_price = calculator.calculate(order.product) %}
 
@@ -55,10 +54,11 @@
                             </td>
                             <td class="cart_total">
                                 <p class="cart_total_price">€{{ promotional_price| number_format(2) * order.quantity }}</p>
-                                {% set total_price = total_price + promotional_price| number_format(2) * order.quantity %}
                             </td>
                             <td class="cart_delete">
-                                <a class="cart_quantity_delete" href=""><i class="fa fa-times"></i></a>
+                                <form  action="{{ path('order_delete', {'id': order.id }) }}">
+                                    <button class="cart_quantity_delete" type="submit"><i class="fa fa-times"></i></button>
+                                </form>
                             </td>
                         </tr>
                     {% endfor %}
@@ -68,12 +68,22 @@
                         <td class="cart_price"></td>
                         <td class="cart_quantity"></td>
                         <td>
-                            <p class="cart_total_price">€{{ total_price }}</p>
+                            <h3 style="text-decoration: underline">Total Price:</h3>
+                            {% if promotional_total_price != total_price %}
+                                <p class="cart_total_price">
+                                    <del>€{{ total_price | number_format(2) }}</del>
+                                </p>
+                            {% endif %}
+                            <p class="cart_total_price">€{{ promotional_total_price | number_format(2) }}</p>
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
+            <form action="{{ path('cart_checkout') }}">
+                <button type="submit" class="btn btn-primary" name="Checkout">Checkout</button>
+            </form>
+
         </div>
     </section> <!--/#cart_items-->
 
