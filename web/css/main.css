@@ -2544,6 +2544,9 @@ h2.title {
     padding: 0;
 }
 
+#user-profile{
+    width: 70%;
+}
 #user_upload_avatar{
     position: relative;
 }
@@ -2580,5 +2583,7 @@ del{
 #show-discount{
     position: relative;
 }
+
+
 
 
