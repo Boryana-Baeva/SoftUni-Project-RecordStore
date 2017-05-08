@@ -12,15 +12,18 @@ class ImageType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add("url",FileType::class,[
-            "label"=>"Avatar",
-            'data_class' => null
+        $builder->add("url", FileType::class, [
+            "label" => false,
+            'data_class' => null,
+            'attr' => [
+                'style' => 'display:none'
+            ]
         ]);
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(["data_class"=>Image::class]);
+        $resolver->setDefaults(["data_class" => Image::class]);
     }
 
     public function getName()

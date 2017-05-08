@@ -1,0 +1,75 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <section id="cart_items">
+        <div class="container">
+            <div class="breadcrumbs">
+                <ol class="breadcrumb">
+                    <li><a href="/">Home</a></li>
+                    <li><a href="{{ path("cart_index") }}">Shopping Cart</a></li>
+                    <li class="active">Checkout</li>
+                </ol>
+            </div>
+            <span>
+                <h4 >Cash Amount: €{{ app.user.cash | number_format(2)}}</h4>
+            </span>
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr class="cart_menu">
+                        <td class="image" style="width: 100px">Items</td>
+                        <td class="description"></td>
+                        <td class="quantity">Quantity</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td class="cart_product">
+                                <a href="{{ path('product_show', { 'id': order.product.id }) }}">
+                                    <img src="/images/product/{{ order.product.image }}" alt="" style="width: 50px;">
+                                </a>
+                            </td>
+                            <td class="cart_description">
+                                <h4><a href="{{ path('product_show', { 'id': order.product.id }) }}">
+                                        {{ order.product.artist }} - {{ order.product.title }}
+                                    </a></h4>
+                            </td>
+
+                            <td class="cart_quantity">
+                                <div class="cart_quantity_button">
+                                    <h4 class="cart_quantity_input" >{{ order.quantity }}</h4>
+                                </div>
+                            </td>
+
+                        </tr>
+                    {% endfor %}
+                    {% if orders %}
+                    <tr>
+                        <td></td>
+                        <td>
+                            <h3 style="text-decoration: underline">Total Price:</h3>
+                            <p class="cart_total_price">€{{ total_cart_price | number_format(2) }}</p>
+                        </td>
+                        <td>
+                            <form action="{{ path('cart_payment') }}">
+                                <button type="submit" class="btn btn-primary" name="Buy">Buy</button>
+                            </form>
+                        </td>
+                    {% else %}
+                        <tr>
+                            <td></td>
+                            <td style="text-align: center"><h2>No products in your cart</h2></td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section> <!--/#cart_items-->
+{% endblock %}
+
+{% block scripts %}
+
+{% endblock %}
+

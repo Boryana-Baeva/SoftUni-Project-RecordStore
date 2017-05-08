@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 class CartController extends Controller
 {
     const STATUS_ADDED = 'ADDED';
+    const STATUS_PENDING = 'PENDING';
     const STATUS_ORDERED = 'ORDERED';
 
     /**
@@ -31,6 +32,12 @@ class CartController extends Controller
             ->getRepository('RecordStoreBundle:CartOrder')
             ->fetchUsersOrdersByStatus(self::STATUS_ADDED, $user);
 
+        $pendingOrders = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:CartOrder')
+            ->fetchUsersOrdersByStatus(self::STATUS_PENDING, $user);
+
+        $orders = array_merge($addedOrders, $pendingOrders);
+
         $calculator = $this->get('price_calculator');
 
         $totalPrice = 0;
@@ -46,7 +53,7 @@ class CartController extends Controller
 
         return $this->render('cart/cart.html.twig', array(
             'user' => $user,
-            'orders' => $addedOrders,
+            'orders' => $orders,
             'calculator' => $calculator,
             'total_price' => $totalPrice,
             'promotional_total_price' => $promotionalTotalPrice,
@@ -73,9 +80,9 @@ class CartController extends Controller
 
         $order->setSinglePrice($singlePrice);
 
-        if($request->request->get('quantity') !== null){
+        if ($request->request->get('quantity') !== null) {
             $order->setQuantity($request->request->get('quantity'));
-        }else{
+        } else {
             $order->setQuantity(1);
         }
 
@@ -111,8 +118,14 @@ class CartController extends Controller
             ->getRepository('RecordStoreBundle:CartOrder')
             ->fetchUsersOrdersByStatus(self::STATUS_ADDED, $user);
 
+        $pendingOrders = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:CartOrder')
+            ->fetchUsersOrdersByStatus(self::STATUS_PENDING, $user);
+
+        $orders = array_merge($addedOrders, $pendingOrders);
+
         $totalCartPrice = 0;
-        foreach ($addedOrders as $order) {
+        foreach ($orders as $order) {
             /**
              * @var CartOrder $order
              */
@@ -120,7 +133,8 @@ class CartController extends Controller
 
             if ($order->getQuantity() > $order->getProduct()->getStock()->getQuantity()) {
 
-                $this->addFlash('error', 'There is not enough of ' . $order->getProduct()->getTitle() . ' in stock.');
+                $this->addFlash('error', 'There is not enough of ' . $order->getProduct()->getArtist() .
+                    ' - ' . $order->getProduct()->getTitle() . ' in stock.');
 
                 return $this->redirectToRoute('cart_index', array(
                     'user' => $user
@@ -135,34 +149,87 @@ class CartController extends Controller
             return $this->redirectToRoute('cart_index', array(
                 'user' => $user
             ));
+
+        } else {
+
+
+            foreach ($orders as $order) {
+
+                if($order->getStatus() === self::STATUS_ADDED){
+                    $order->setStatus(self::STATUS_PENDING);
+                }
+
+                $em = $this->getDoctrine()->getManager();
+                $em->flush();
+            }
+
+            return $this->render('cart/checkout.html.twig', array(
+                'user' => $user,
+                'orders' => $orders,
+                'total_cart_price' => $totalCartPrice
+
+            ));
         }
 
-        foreach ($addedOrders as $order) {
+    }
 
+    /**
+     * @Route("/cart/checkout/payment", name="cart_payment")
+     */
+    public function paymentAction()
+    {
+        $user = $this->getUser();
+
+        $pendingOrders = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:CartOrder')
+            ->fetchUsersOrdersByStatus(self::STATUS_PENDING, $user);
+
+        foreach ($pendingOrders as $order) {
+
+            /**
+             * @var CartOrder $order
+             */
             $order->setStatus(self::STATUS_ORDERED);
 
             $remainingStock = $order->getProduct()->getStock()->getQuantity() - $order->getQuantity();
             $order->getProduct()->getStock()->setQuantity($remainingStock);
 
-            $remainingCash = $order->getUser()->getCash() - $totalCartPrice;
+            $remainingCash = $order->getUser()->getCash() - $order->getTotalPrice();
             $order->getUser()->setCash($remainingCash);
 
-
-
             $em = $this->getDoctrine()->getManager();
-            /*$em->persist($order);*/
             $em->flush();
-            
-
         }
 
-        $this->addFlash('success', 'You have successfully placed your orders.');
+        $this->addFlash('success', 'Payment was successful.');
 
         return $this->redirectToRoute('cart_index', array(
             'user' => $user
         ));
 
     }
+
+    /**
+     * @Route("/user/products", name="my_products")
+     * @Method("GET")
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function showUsersProductsAction()
+    {
+        $user = $this->getUser();
+        $calculator = $this->get('price_calculator');
+
+        $myProducts = $this->getDoctrine()
+            ->getRepository('RecordStoreBundle:CartOrder')
+            ->fetchUsersOrdersByStatus(self::STATUS_ORDERED, $user);
+
+        return $this->render('user/my_products.html.twig', array(
+            'user' => $user,
+            'calculator' => $calculator,
+            'my_products' => $myProducts
+        ));
+    }
+
 
     /**
      * Deletes a product entity.

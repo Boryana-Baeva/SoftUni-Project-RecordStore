@@ -38,10 +38,10 @@
                                     <li><a href="{{ path('user_profile', {'id': app.user.id}) }}"><i
                                                     class="fa fa-user"></i> {{ app.user.firstName ~ ' ' ~ app.user.lastName }}
                                         </a></li>
-                                    <li><a href="#"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+                                    <li><a href="{{ path("my_products") }}"><i class="fa fa-star"></i> My Products</a></li>
                                     <li><a href="{{ path("cart_index") }}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                                    <li><a href="{{ path("user_logout") }}"><i class="fa fa-lock"></i> Logout</a>
-                                    </li>
+                                    <li><a href="{{ path('cart_checkout') }}"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+                                    <li><a href="{{ path("user_logout") }}"><i class="fa fa-lock"></i> Logout</a></li>
                                 {% else %}
                                     <li><a href="{{ path("user_login") }}"><i class="fa fa-lock"></i> Login</a></li>
                                     <li><a href="{{ path("user_register") }}"><i class="fa fa-lock"></i>

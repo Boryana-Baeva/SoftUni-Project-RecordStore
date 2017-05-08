@@ -11,7 +11,7 @@
                 </ol>
             </div>
             <span>
-                <h4 >Cash Amount: €{{ app.user.cash | number_format(2)}}</h4>
+                <h4>Cash Amount: €{{ app.user.cash | number_format(2) }}</h4>
             </span>
             <div class="table-responsive cart_info">
                 <table class="table table-condensed">
@@ -32,7 +32,7 @@
                         <tr>
                             <td class="cart_product">
                                 <a href="{{ path('product_show', { 'id': order.product.id }) }}">
-                                <img src="/images/product/{{ order.product.image }}" alt="" style="width: 50px;">
+                                    <img src="/images/product/{{ order.product.image }}" alt="" style="width: 50px;">
                                 </a>
                             </td>
                             <td class="cart_description">
@@ -42,22 +42,25 @@
                             </td>
                             <td class="cart_price">
                                 {% if promotional_price != order.product.price %}
-                                    <p><del>€{{ order.product.price | number_format(2) }}</del></p>
+                                    <p>
+                                        <del>€{{ order.product.price | number_format(2) }}</del>
+                                    </p>
                                 {% endif %}
                                 <p>€{{ promotional_price | number_format(2) }}</p>
                             </td>
                             <td class="cart_quantity">
                                 <div class="cart_quantity_button">
-                                    <input class="cart_quantity_input" type="number" name="quantity" value="{{ order.quantity }}"
-                                           autocomplete="off" size="2" style="width: 40px">
+                                    <p class="cart_quantity_input">{{ order.quantity }}</p>
                                 </div>
                             </td>
                             <td class="cart_total">
-                                <p class="cart_total_price">€{{ promotional_price| number_format(2) * order.quantity }}</p>
+                                <p class="cart_total_price">
+                                    €{{ promotional_price| number_format(2) * order.quantity }}</p>
                             </td>
                             <td class="cart_delete">
-                                <form  action="{{ path('order_delete', {'id': order.id }) }}">
-                                    <button class="cart_quantity_delete" type="submit"><i class="fa fa-times"></i></button>
+                                <form action="{{ path('order_delete', {'id': order.id }) }}">
+                                    <button class="cart_quantity_delete" type="submit"><i class="fa fa-trash-o"></i>
+                                    </button>
                                 </form>
                             </td>
                         </tr>
@@ -68,21 +71,29 @@
                         <td class="cart_price"></td>
                         <td class="cart_quantity"></td>
                         <td>
-                            <h3 style="text-decoration: underline">Total Price:</h3>
-                            {% if promotional_total_price != total_price %}
-                                <p class="cart_total_price">
-                                    <del>€{{ total_price | number_format(2) }}</del>
-                                </p>
+                            {% if orders %}
+                                <h3 style="text-decoration: underline">Total Price:</h3>
+                                {% if promotional_total_price != total_price %}
+                                    <p class="cart_total_price">
+                                        <del>€{{ total_price | number_format(2) }}</del>
+                                    </p>
+                                {% endif %}
+                                <p class="cart_total_price">€{{ promotional_total_price | number_format(2) }}</p>
+                            {% else %}
+                                <h2>This cart is empty</h2>
                             {% endif %}
-                            <p class="cart_total_price">€{{ promotional_total_price | number_format(2) }}</p>
+                        </td>
+                        <td>
+                            {% if orders %}
+                                <form action="{{ path('cart_checkout') }}">
+                                    <button type="submit" class="btn btn-primary" name="Checkout">Checkout</button>
+                                </form>
+                            {% endif %}
                         </td>
                     </tr>
                     </tbody>
                 </table>
             </div>
-            <form action="{{ path('cart_checkout') }}">
-                <button type="submit" class="btn btn-primary" name="Checkout">Checkout</button>
-            </form>
 
         </div>
     </section> <!--/#cart_items-->
