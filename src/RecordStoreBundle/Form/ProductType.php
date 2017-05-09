@@ -35,7 +35,7 @@ class ProductType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => false,
                 'attr' => [
-                    'rows' => 15
+                    'rows' => 5
                 ]
             ])
             ->add('image_form', FileType::class, [

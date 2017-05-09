@@ -38,9 +38,12 @@
                                     <li><a href="{{ path('user_profile', {'id': app.user.id}) }}"><i
                                                     class="fa fa-user"></i> {{ app.user.firstName ~ ' ' ~ app.user.lastName }}
                                         </a></li>
-                                    <li><a href="{{ path("my_products") }}"><i class="fa fa-star"></i> My Products</a></li>
-                                    <li><a href="{{ path("cart_index") }}"><i class="fa fa-shopping-cart"></i> Cart</a></li>
-                                    <li><a href="{{ path('cart_checkout') }}"><i class="fa fa-crosshairs"></i> Checkout</a></li>
+                                    <li><a href="{{ path("my_products") }}"><i class="fa fa-star"></i> My Products</a>
+                                    </li>
+                                    <li><a href="{{ path("cart_index") }}"><i class="fa fa-shopping-cart"></i> Cart</a>
+                                    </li>
+                                    <li><a href="{{ path('cart_checkout') }}"><i class="fa fa-crosshairs"></i> Checkout</a>
+                                    </li>
                                     <li><a href="{{ path("user_logout") }}"><i class="fa fa-lock"></i> Logout</a></li>
                                 {% else %}
                                     <li><a href="{{ path("user_login") }}"><i class="fa fa-lock"></i> Login</a></li>
@@ -72,11 +75,22 @@
                                 <li><a href="{{ path("homepage") }}" class="active">Home</a></li>
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
-                                        <li><a href="{{ path('cart_checkout') }}">Checkout</a></li>
-                                        <li><a href="{{ path("cart_index") }}">Cart</a></li>
+                                        <li><a href="{{ path('cart_checkout') }}"><i class="fa fa-crosshairs"></i>
+                                                 Checkout</a></li>
+                                        <li><a href="{{ path("cart_index") }}"><i class="fa fa-shopping-cart"></i>
+                                                 Cart</a></li>
                                     </ul>
                                 </li>
-                                <li><a href="#">Contact</a></li>
+                                {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                                    <li class="dropdown"><a href="#">Administration<i class="fa fa-angle-down"></i></a>
+                                        <ul role="menu" class="sub-menu">
+                                            <li><a href="{{ path('product_index') }}"><i class="fa fa-list"></i>
+                                                     Product List</a></li>
+                                            <li><a href="{{ path("product_new") }}"><i class="fa fa-plus"></i>
+                                                     Add New Product</a></li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </div>
                     </div>

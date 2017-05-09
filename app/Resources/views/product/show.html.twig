@@ -38,7 +38,7 @@
                                     {% endif %}
 								</span>
                     <p><b>Artist:</b>
-                        <a href="#{#{{ path('products_by_artists', { 'artist': product.artist }) }}#}">{{ product.artist }}</a>
+                        <a href="{{ path('products_by_artists', { 'artist': product.artist }) }}">{{ product.artist }}</a>
                     </p>
                     <p><b>Year of Release:</b> {{ product.yearOfRelease }}</p>
                     <p><b>Genre:</b>

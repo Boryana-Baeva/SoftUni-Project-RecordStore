@@ -2,14 +2,47 @@
 
 {% block body %}
 
-    <div class="col-md-8 col-md-offset-2 col-sm-12 col-sm-offset-1">
+    <div class="col-md-8 col-md-offset-3 col-sm-12 col-sm-offset-1">
         <div class="panel panel-default" id="user-profile">
             <div class="panel-body">
                 <div class="product-details"><!--user-details-->
                     <div class="container"><!--/user-info-->
                         <div class="row">
-                            <div style="float:left">
-                                <h2>{{ user.username }}</h2>
+                            <div>
+                                <div class="profile-header" style="margin-top: 20px;">
+                                    <h2>  {{ user.username }}</h2>
+                                    <div id="edit-panel">
+                                        <div class="btn-group">
+                                            {% if app.user is same as(user) or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                                            <button type="button" class="btn btn-primary"><i class="fa fa-pencil"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-primary dropdown-toggle"
+                                                    data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+
+                                            <ul class="dropdown-menu" role="menu" style="padding-left: 5px">
+
+                                                <li role="presentation">
+                                                    <a role="menuitem" href="{{ path('profile_edit', { 'id': user.id }) }}">Edit Profile</a>
+                                                </li>
+                                                {% endif %}
+                                                {% if app.user is same as(user) %}
+                                                    <li role="presentation">
+                                                        <a role="menuitem"  href="{{ path('change_password', { 'id': user.id }) }}">Change
+                                                            Password</a>
+                                                    </li>
+                                                    <li class="divider"></li>
+                                                    <li role="presentation" style="margin-left: 20px">
+                                                        {{ form_start(delete_account_form) }}
+                                                        <a><input role="menuitem" type="submit" value="Delete Account"/></a>
+                                                        {{ form_end(delete_account_form) }}
+                                                    </li>
+                                                {% endif %}
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="avatar-container">
                                     {% if user.avatar %}
 
@@ -22,7 +55,7 @@
 
                                 {% if app.user is same as(user) %}
                                     <div class="input-group">
-                                        <label class="input-group-btn">
+                                        <label class="input-group-btn" id="profile-btn-group">
                                             <span class="btn btn-primary" style="border-radius: 5px">Browse&hellip; </span>
                                                 {{ form_start(avatar_form) }}
 
@@ -36,7 +69,7 @@
                                     </div>
                                 {% endif %}
                             </div>
-                            <div class="pull-left" style="margin-top: 100px">
+                            <div class="pull-left">
                                 <h4>
                                     <i class="fa fa-user"></i> {{ user.firstName ~ ' ' ~ user.lastName }}
                                 </h4>
@@ -44,43 +77,6 @@
                                 </h4>
                                 <h4><i class="fa fa-mobile-phone"></i> {{ user.phoneNumber }}
                                 </h4>
-                            </div>
-                            <div class="pull-left" style="margin-top: 20px;">
-                                <div id="edit-panel">
-                                    <div class="btn-group">
-                                        {% if app.user is same as(user) or is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
-                                        <button type="button" class="btn btn-primary"><i class="fa fa-pencil"></i>
-                                        </button>
-                                        <button type="button" class="btn btn-primary dropdown-toggle"
-                                                data-toggle="dropdown">
-                                            <span class="caret"></span>
-                                        </button>
-
-                                        <ul class="dropdown-menu" role="menu">
-
-                                            <li>
-                                                <a href="{{ path('profile_edit', { 'id': user.id }) }}">Edit Profile</a>
-                                            </li>
-                                            {% endif %}
-                                            {% if app.user is same as(user) %}
-                                                <li>
-                                                    <a href="{{ path('change_password', { 'id': user.id }) }}">Change
-                                                        Password</a>
-                                                </li>
-                                            {% endif %}
-                                        </ul>
-
-                                        {#{% if app.user is same as(user) %}
-                                            {{ form_start(delete_account_form) }}
-                                            <button class="btn btn-danger" type="submit" value="Delete">
-                                                <i class="fa fa-trash-o"></i>
-                                            </button>
-                                            {{ form_end(delete_account_form) }}
-                                        {% endif %}#}
-
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div><!--/user-info-->

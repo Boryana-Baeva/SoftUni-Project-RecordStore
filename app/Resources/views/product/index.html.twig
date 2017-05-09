@@ -1,61 +1,72 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1>Products list</h1>
-
-    <table>
-        <thead>
-        <tr>
-            <th>Cover</th>
-            <th>Title</th>
-            <th>Artist</th>
-            <th>Year Of Release</th>
-            <th>Genre</th>
-            <th>Price</th>
-            <th>Stock</th>
-            <th>Description</th>
-            <th>Date Created</th>
-            <th>Date Updated</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for product in pagination %}
-            <tr>
-                <td><a href="{{ path('product_show', { 'id': product.id }) }}">
-                        <img src="/images/product/{{ product.image }}" style="width: 50px;">
-                    </a>
-                </td>
-                <td>{{ product.title }}</td>
-                <td>{{ product.artist }}</td>
-                <td>{{ product.yearOfRelease }}</td>
-                <td>{{ product.category.name }}</td>
-                <td>€{{ product.price }}</td>
-                <td>{{ product.stock.quantity }}</td>
-                <td>{{ product.description }}</td>
-                <td>{% if product.dateCreated %}{{ product.dateCreated|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>{% if product.dateUpdated %}{{ product.dateUpdated|date('Y-m-d H:i:s') }}{% endif %}</td>
-                <td>
-                    <ul>
-                        <li>
-                            <a href="{{ path('product_show', { 'id': product.id }) }}">show</a>
-                        </li>
-                        <li>
-                            <a href="{{ path('product_edit', { 'id': product.id }) }}">edit</a>
-                        </li>
-                    </ul>
-                </td>
-            </tr>
-
-        {% endfor %}
-        </tbody>
-    </table>
-    <ul>
-        <li>
-            <a href="{{ path('product_new') }}">Create a new product</a>
-        </li>
-    </ul>
-    <div class="col-md-6 col-md-offset-6">
+    <h1 class=" title text-center" style="color: #FE980F">Product List</h1>
+    <section id="cart_items">
+        <div class="container">
+            <div class="table-responsive cart_info">
+                <table class="table table-condensed">
+                    <thead>
+                    <tr class="cart_menu">
+                        <th class="image">Cover</th>
+                        <th class="title">
+                            {{ knp_pagination_sortable(pagination, 'Title', 'p.title') }}
+                            <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th class="artist">
+                            {{ knp_pagination_sortable(pagination, 'Artist', 'p.artist') }}
+                            <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th class="genre">Genre</th>
+                        <th class="price">
+                            {{ knp_pagination_sortable(pagination, 'Price', 'p.price') }}
+                            <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th class="quantity">Stock</th>
+                        <th class="created">
+                            {{ knp_pagination_sortable(pagination, 'Date Created', 'p.dateCreated') }}
+                            <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th class="updated">
+                            {{ knp_pagination_sortable(pagination, 'Date Updated', 'p.dateUpdated') }}
+                            <i class="fa fa-sort" aria-hidden="true"></i>
+                        </th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in pagination %}
+                        <tr id="products-table-row">
+                            <td><a href="{{ path('product_show', { 'id': product.id }) }}">
+                                    <img src="/images/product/{{ product.image }}" style="width: 50px;">
+                                </a>
+                            </td>
+                            <td><a href="{{ path('product_show', { 'id': product.id }) }}">
+                                    {{ product.title }}</a></td>
+                            <td><a href="{{ path('products_by_artists', { 'artist': product.artist }) }}">
+                                    {{ product.artist }}</a></td>
+                            <td>{{ product.category.name }}</td>
+                            <td>€{{ product.price }}</td>
+                            <td class="quantity">{{ product.stock.quantity }}</td>
+                            <td>{% if product.dateCreated %}{{ product.dateCreated|date('d/m/Y H:i:s') }}{% endif %}</td>
+                            <td>{% if product.dateUpdated %}{{ product.dateUpdated|date('d/m/Y H:i:s') }}{% endif %}</td>
+                            <td>
+                                <span>
+                                    <a href="{{ path('product_edit', { 'id': product.id }) }}" style="margin-left:10px">
+                                        <i class="fa fa-pencil"></i></a>
+                                    <a href="{{ path('product_delete', { 'id': product.id }) }}"
+                                       style="margin-left:10px">
+                                        <i class="fa fa-trash-o"></i></a>
+                                </span>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+    <div class="col-md-6 col-md-offset-5">
         {{ knp_pagination_render(pagination) }}
     </div>
 {% endblock %}

@@ -153,8 +153,16 @@ class UserController extends Controller
         if ($delete_account_form->isSubmitted() && $delete_account_form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $user->getAvatar()->setUser(null);
+            if ($user->getOrders()) {
+                foreach ($user->getOrders() as $order) {
+                    $order->setUser(null);
+                }
+            }
             $em->flush();
             $em->remove($user->getAvatar());
+            foreach ($user->getOrders() as $order){
+                $em->remove($order);
+            }
             $em->remove($user);
             $em->flush();
 

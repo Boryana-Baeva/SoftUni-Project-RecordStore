@@ -116,15 +116,20 @@ class ProductController extends Controller
      */
     public function showAction(Product $product)
     {
+        if (!$product) {
+            throw $this->createNotFoundException('The product does not exist');
+        }
+
         $deleteForm = $this->createDeleteForm($product);
 
-        if ($product->getStock()->getQuantity() < 1 &&
-            $this->getUser()->getRole() == 'ROLE_USER'
-        ) {
+        if ($product->getStock()->getQuantity() < 1) {
 
-            $this->addFlash('error', 'Product is out of stock!');
-            return $this->redirectToRoute('homepage', array('id' => $product->getId()));
+            if (!$this->getUser() || $this->getUser()->getRole() == 'ROLE_USER') {
+                $this->addFlash('error', 'Product is out of stock!');
+                return $this->redirectToRoute('homepage', array('id' => $product->getId()));
+            }
         }
+
 
         $calculator = $this->get('price_calculator');
 
