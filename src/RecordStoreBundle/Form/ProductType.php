@@ -56,13 +56,4 @@ class ProductType extends AbstractType
         ));
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getBlockPrefix()
-    {
-        return 'recordstorebundle_product';
-    }
-
-
 }

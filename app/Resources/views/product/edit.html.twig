@@ -1,18 +1,20 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <h1 style="text-align: center;color: #FE980F">Edit Product</h1>
     <div class="container">
         <div class="col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
             <div class="panel panel-default" style="width: 100%">
                 <div class="panel-body">
+                    <h1 class="text-center" style="color: #FE980F">Edit Product</h1>
                     {{ form_start(edit_form) }}
                     {{ form_widget(edit_form) }}
-                    <input type="submit" class="btn btn-primary" value="Edit"/>
-                    <button class="btn btn-primary">
+                    <div class="text-center">
+                        <input type="submit" class="btn btn-primary" value="Edit"/>
+                    {{ form_end(edit_form) }}
+                        <button class="btn btn-primary">
                         <a href="{{ path('product_index') }}">Cancel</a>
                     </button>
-                    {{ form_end(edit_form) }}
+                </div>
                 </div>
             </div>
         </div>

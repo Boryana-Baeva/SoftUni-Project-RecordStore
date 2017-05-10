@@ -31,7 +31,7 @@
                             {{ knp_pagination_sortable(pagination, 'Date Updated', 'p.dateUpdated') }}
                             <i class="fa fa-sort" aria-hidden="true"></i>
                         </th>
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -52,11 +52,8 @@
                             <td>{% if product.dateUpdated %}{{ product.dateUpdated|date('d/m/Y H:i:s') }}{% endif %}</td>
                             <td>
                                 <span>
-                                    <a href="{{ path('product_edit', { 'id': product.id }) }}" style="margin-left:10px">
+                                    <a href="{{ path('product_edit', { 'id': product.id }) }}">
                                         <i class="fa fa-pencil"></i></a>
-                                    <a href="{{ path('product_delete', { 'id': product.id }) }}"
-                                       style="margin-left:10px">
-                                        <i class="fa fa-trash-o"></i></a>
                                 </span>
                             </td>
                         </tr>

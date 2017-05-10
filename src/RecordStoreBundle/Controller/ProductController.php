@@ -12,11 +12,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Form\FormError;
 
-/**
- * Product controller.
- *
- * @Route("product")
- */
 class ProductController extends Controller
 {
     const PAGE_LIMIT = 12;
@@ -24,7 +19,7 @@ class ProductController extends Controller
     /**
      * Lists all product entities.
      *
-     * @Route("/products", name="product_index")
+     * @Route("/admin/product/list", name="product_index")
      * @Method("GET")
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\Response
@@ -55,7 +50,7 @@ class ProductController extends Controller
     /**
      * Creates a new product entity.
      *
-     * @Route("/new", name="product_new")
+     * @Route("/admin/product/new", name="product_new")
      * @Method({"GET", "POST"})
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
@@ -111,7 +106,7 @@ class ProductController extends Controller
     /**
      * Finds and displays a product entity.
      *
-     * @Route("/{id}", name="product_show")
+     * @Route("product/{id}", name="product_show")
      * @Method("GET")
      */
     public function showAction(Product $product)
@@ -144,7 +139,7 @@ class ProductController extends Controller
     /**
      * Displays a form to edit an existing product entity.
      *
-     * @Route("/{id}/edit", name="product_edit")
+     * @Route("admin/product/{id}/edit", name="product_edit")
      * @Method({"GET", "POST"})
      */
     public function editAction(Request $request, Product $product)
@@ -188,21 +183,26 @@ class ProductController extends Controller
         ));
     }
 
+
     /**
      * Deletes a product entity.
      *
-     * @Route("/{id}", name="product_delete")
+     * @Route("admin/product/delete/{id}", name="product_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Product $product)
     {
         $stock = $product->getStock();
+        $orders = $product->getOrders();
         $form = $this->createDeleteForm($product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($stock);
+            foreach ($orders as $order){
+                $em->remove($order);
+            }
             $em->remove($product);
             $em->flush();
 
@@ -219,7 +219,7 @@ class ProductController extends Controller
      *
      * @return \Symfony\Component\Form\Form The form
      */
-    private function createDeleteForm(Product $product)
+    public function createDeleteForm(Product $product)
     {
         return $this->createFormBuilder()
             ->setAction($this->generateUrl('product_delete', array('id' => $product->getId())))

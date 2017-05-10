@@ -3,24 +3,26 @@
 {% block body %}
     {% set promotional_price = calculator.calculate(product) %}
 
-    <div class="col-md-9 col-md-offset-2 col-sm-12 col-sm-offset-1">
-        <div class="product-details"><!--product-details-->
-            <div class="col-md-4 col-sm-5">
-                <div class="view-product">
-                    <img class="img-responsive img-rounded" src="/images/product/{{ product.image }}" alt=""/>
-                </div>
-                {% if promotional_price != product.price %}
-                <div class="sale">
-                    <img src="{{ asset('images/home/sale.png') }}">
-                </div>
-                    <span class="discount" id="show-discount">{{ calculator.relevantPromotion }}% OFF</span>
-                {% endif %}
-            </div>
+    <div class="col-md-12 col-md-offset-2 col-sm-12 col-sm-offset-2">
+        <div class="panel panel-default" id="user-profile">
+            <div class="panel-body">
+                <div class="product-details" style="margin-top: 30px"><!--product-details-->
+                    <div class="col-md-5 col-sm-5">
+                        <div class="view-product">
+                            <img class="img-responsive img-rounded" src="/images/product/{{ product.image }}" alt=""/>
+                        </div>
+                        {% if promotional_price != product.price %}
+                            <div class="sale">
+                                <img src="{{ asset('images/home/sale.png') }}">
+                            </div>
+                            <span class="discount" id="show-discount">{{ calculator.relevantPromotion }}% OFF</span>
+                        {% endif %}
+                    </div>
 
-            <div class="col-sm-7">
-                <div class="product-information"><!--/product-information-->
-                    <h2>{{ product.title }}</h2>
-                    <div><img src="{{ asset('images/product-details/rating.png') }}" alt=""/></div>
+                    <div class="col-sm-7">
+                        <div class="product-information"><!--/product-information-->
+                            <h2>{{ product.title }}</h2>
+                            <div><img src="{{ asset('images/product-details/rating.png') }}" alt=""/></div>
 								<span>
                                     {% if promotional_price != product.price %}
                                         <span><del>€{{ product.price | number_format(2) }}</del></span>
@@ -28,7 +30,7 @@
                                     <span>€{{ promotional_price | number_format(2) }}</span>
 
                                     {% if app.user %}
-                                    <form method="post" action="{{ path('cart_add', {'id': product.id }) }}">
+                                        <form method="post" action="{{ path('cart_add', {'id': product.id }) }}">
                                         <label>Quantity:</label>
 									<input name="quantity" title="" type="number" value="1"/>
 									<button type="submit" class="btn btn-fefault cart">
@@ -37,41 +39,41 @@
                                     </form>
                                     {% endif %}
 								</span>
-                    <p><b>Artist:</b>
-                        <a href="{{ path('products_by_artists', { 'artist': product.artist }) }}">{{ product.artist }}</a>
-                    </p>
-                    <p><b>Year of Release:</b> {{ product.yearOfRelease }}</p>
-                    <p><b>Genre:</b>
-                        <a href="{{ path('products_categorized', { 'category': product.category.id }) }}">{{ product.category.name }}</a>
-                    </p>
-                    {% if product.stock.quantity > 0 %}
-                        <p style="color: #66dd66"><b style="color: #696763">Availability: </b>{{ product.stock.quantity}} in stock</p>
-                    {% else %}
-                        <p style="color: #FF4518"><b style="color: #696763">Availability:</b> Out Of Stock</p>
-                    {% endif %}
-                    <p><b>Description:</b>
-                    <p>
-                        {{ product.description|nl2br }}
-                    </p>
+                            <p><b>Artist:</b>
+                                <a href="{{ path('products_by_artists', { 'artist': product.artist }) }}">{{ product.artist }}</a>
+                            </p>
+                            <p><b>Year of Release:</b> {{ product.yearOfRelease }}</p>
+                            <p><b>Genre:</b>
+                                <a href="{{ path('products_categorized', { 'category': product.category.id }) }}">{{ product.category.name }}</a>
+                            </p>
+                            {% if product.stock.quantity > 0 %}
+                                <p style="color: #66dd66"><b
+                                            style="color: #696763">Availability: </b>{{ product.stock.quantity }} in
+                                    stock</p>
+                            {% else %}
+                                <p style="color: #FF4518"><b style="color: #696763">Availability:</b> Out Of Stock</p>
+                            {% endif %}
+                            <p><b>Description:</b>
+                            <p>
+                                {{ product.description|nl2br }}
+                            </p>
 
-                    {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
-                        <div id="edit-panel">
-                            <button type="button" class="btn btn-success">
-                                <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
-                            </button>
-                            {{ form_start(delete_form) }}
-                            <button class="btn btn-danger" type="submit" value="Delete">Delete
-                            </button>
-                            {{ form_end(delete_form) }}
-                            <button type="button" class="btn btn-info">
-                                <a href="{{ path('product_index') }}">See All</a>
-                            </button>
-                        </div>
-                    {% endif %}
-                </div><!--/product-information-->
-
+                            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
+                                <div id="edit-panel">
+                                    <button type="button" class="btn btn-success">
+                                        <a href="{{ path('product_edit', { 'id': product.id }) }}">Edit</a>
+                                    </button>
+                                    {{ form_start(delete_form) }}
+                                    <button class="btn btn-danger" type="submit" value="Delete">Delete
+                                    </button>
+                                    {{ form_end(delete_form) }}
+                                </div>
+                            {% endif %}
+                        </div><!--/product-information-->
+                    </div>
+                </div><!--/product-details-->
             </div>
-        </div><!--/product-details-->
+        </div>
     </div>
 
 {% endblock %}

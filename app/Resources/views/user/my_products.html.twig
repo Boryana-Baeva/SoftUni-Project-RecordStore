@@ -5,17 +5,17 @@
         <div class="container">
             <div class="table-responsive cart_info">
                 <table class="table table-condensed">
+                    {% if my_products %}
                     <thead>
                     <tr class="cart_menu">
-                        <td class="description">Items</td>
-                        <td class="quantity">Quantity</td>
-                        <td class="price">Price</td>
-                        <td class="quantity">Quantity</td>
-                        <td class="total">Total</td>
+                        <th class="description">Items</th>
+                        <th class="quantity">Quantity</th>
+                        <th class="price">Price</th>
+                        <th class="quantity">Quantity</th>
+                        <th class="total">Total</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% if my_products %}
                     {% for order in my_products %}
                         {% set promotional_price = calculator.calculate(order.product) %}
                         <tr>
@@ -44,14 +44,15 @@
                             </td>
                         </tr>
                     {% endfor %}
+                    </tbody>
                     {% else %}
+                        <thead><tr class="cart_menu"><th></th></tr></thead>
+                        <tbody>
                         <tr>
-                            <td></td>
-                            <td></td>
                             <td style="text-align: center"><h2>No products purchased</h2></td>
                         </tr>
+                        </tbody>
                     {% endif %}
-                    </tbody>
                 </table>
             </div>
         </div>

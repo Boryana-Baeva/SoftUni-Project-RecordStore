@@ -24,12 +24,15 @@
                                             <ul class="dropdown-menu" role="menu" style="padding-left: 5px">
 
                                                 <li role="presentation">
-                                                    <a role="menuitem" href="{{ path('profile_edit', { 'id': user.id }) }}">Edit Profile</a>
+                                                    <a role="menuitem"
+                                                       href="{{ path('profile_edit', { 'id': user.id }) }}">Edit
+                                                        Profile</a>
                                                 </li>
                                                 {% endif %}
                                                 {% if app.user is same as(user) %}
                                                     <li role="presentation">
-                                                        <a role="menuitem"  href="{{ path('change_password', { 'id': user.id }) }}">Change
+                                                        <a role="menuitem"
+                                                           href="{{ path('change_password', { 'id': user.id }) }}">Change
                                                             Password</a>
                                                     </li>
                                                     <li class="divider"></li>
@@ -45,7 +48,6 @@
                                 </div>
                                 <div class="avatar-container">
                                     {% if user.avatar %}
-
                                         <img src="{{ user.avatar.url }}" class="img-responsive img-rounded">
                                     {% else %}
                                         <img src="{{ asset('images/avatar/no-avatar-image.jpg') }}"
@@ -56,15 +58,16 @@
                                 {% if app.user is same as(user) %}
                                     <div class="input-group">
                                         <label class="input-group-btn" id="profile-btn-group">
-                                            <span class="btn btn-primary" style="border-radius: 5px">Browse&hellip; </span>
-                                                {{ form_start(avatar_form) }}
+                                            <span class="btn btn-primary"
+                                                  style="border-radius: 5px">Browse&hellip; </span>
+                                            {{ form_start(avatar_form) }}
 
-                                                {{ form_widget(avatar_form) }}
+                                            {{ form_widget(avatar_form) }}
 
-                                                <a href="{{ path('avatar_upload', {'id' : user.id}) }}">
+                                            <a href="{{ path('avatar_upload', {'id' : user.id}) }}">
                                                 <input type="submit" value="Upload" class="btn btn-primary"></a>
 
-                                                {{ form_end(avatar_form) }}
+                                            {{ form_end(avatar_form) }}
                                         </label>
                                     </div>
                                 {% endif %}

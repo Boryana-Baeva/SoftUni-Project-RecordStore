@@ -3,6 +3,7 @@
 namespace RecordStoreBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Stock
@@ -33,6 +34,7 @@ class Stock
      * @var int
      *
      * @ORM\Column(name="quantity", type="integer")
+     * @Assert\NotBlank(message="Please add quantity of the product in stock")
      */
     private $quantity;
 

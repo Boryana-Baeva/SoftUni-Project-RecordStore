@@ -15,63 +15,64 @@
             </span>
             <div class="table-responsive cart_info">
                 <table class="table table-condensed">
-                    <thead>
-                    <tr class="cart_menu">
-                        <td class="image">Item</td>
-                        <td class="description"></td>
-                        <td class="price">Price</td>
-                        <td class="quantity">Quantity</td>
-                        <td class="total">Total</td>
-                        <td></td>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for order in orders %}
-                        {% set promotional_price = calculator.calculate(order.product) %}
-
-                        <tr>
-                            <td class="cart_product">
-                                <a href="{{ path('product_show', { 'id': order.product.id }) }}">
-                                    <img src="/images/product/{{ order.product.image }}" alt="" style="width: 50px;">
-                                </a>
-                            </td>
-                            <td class="cart_description">
-                                <h4><a href="{{ path('product_show', { 'id': order.product.id }) }}">
-                                        {{ order.product.artist }} - {{ order.product.title }}
-                                    </a></h4>
-                            </td>
-                            <td class="cart_price">
-                                {% if promotional_price != order.product.price %}
-                                    <p>
-                                        <del>€{{ order.product.price | number_format(2) }}</del>
-                                    </p>
-                                {% endif %}
-                                <p>€{{ promotional_price | number_format(2) }}</p>
-                            </td>
-                            <td class="cart_quantity">
-                                <div class="cart_quantity_button">
-                                    <p class="cart_quantity_input">{{ order.quantity }}</p>
-                                </div>
-                            </td>
-                            <td class="cart_total">
-                                <p class="cart_total_price">
-                                    €{{ promotional_price| number_format(2) * order.quantity }}</p>
-                            </td>
-                            <td class="cart_delete">
-                                <form action="{{ path('order_delete', {'id': order.id }) }}">
-                                    <button class="cart_quantity_delete" type="submit"><i class="fa fa-trash-o"></i>
-                                    </button>
-                                </form>
-                            </td>
+                    {% if orders %}
+                        <thead>
+                        <tr class="cart_menu">
+                            <th class="image">Item</th>
+                            <th class="description"></th>
+                            <th class="price">Price</th>
+                            <th class="quantity">Quantity</th>
+                            <th class="total">Total</th>
+                            <th></th>
                         </tr>
-                    {% endfor %}
-                    <tr>
-                        <td class="cart_product"></td>
-                        <td class="cart_description"></td>
-                        <td class="cart_price"></td>
-                        <td class="cart_quantity"></td>
-                        <td>
-                            {% if orders %}
+                        </thead>
+                        <tbody>
+                        {% for order in orders %}
+                            {% set promotional_price = calculator.calculate(order.product) %}
+
+                            <tr>
+                                <td class="cart_product">
+                                    <a href="{{ path('product_show', { 'id': order.product.id }) }}">
+                                        <img src="/images/product/{{ order.product.image }}" alt=""
+                                             style="width: 50px;">
+                                    </a>
+                                </td>
+                                <td class="cart_description">
+                                    <h4><a href="{{ path('product_show', { 'id': order.product.id }) }}">
+                                            {{ order.product.artist }} - {{ order.product.title }}
+                                        </a></h4>
+                                </td>
+                                <td class="cart_price">
+                                    {% if promotional_price != order.product.price %}
+                                        <p>
+                                            <del>€{{ order.product.price | number_format(2) }}</del>
+                                        </p>
+                                    {% endif %}
+                                    <p>€{{ promotional_price | number_format(2) }}</p>
+                                </td>
+                                <td class="cart_quantity">
+                                    <div class="cart_quantity_button">
+                                        <p class="cart_quantity_input">{{ order.quantity }}</p>
+                                    </div>
+                                </td>
+                                <td class="cart_total">
+                                    <p class="cart_total_price">
+                                        €{{ promotional_price| number_format(2) * order.quantity }}</p>
+                                </td>
+                                <td class="cart_delete">
+                                    <form action="{{ path('order_delete', {'id': order.id }) }}">
+                                        <button class="cart_quantity_delete" type="submit"><i class="fa fa-trash-o"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr>
+                            <td class="cart_product"></td>
+                            <td class="cart_description"></td>
+                            <td class="cart_price"></td>
+                            <td class="cart_quantity"></td>
+                            <td>
                                 <h3 style="text-decoration: underline">Total Price:</h3>
                                 {% if promotional_total_price != total_price %}
                                     <p class="cart_total_price">
@@ -79,19 +80,26 @@
                                     </p>
                                 {% endif %}
                                 <p class="cart_total_price">€{{ promotional_total_price | number_format(2) }}</p>
-                            {% else %}
-                                <h2>This cart is empty</h2>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {% if orders %}
+                            </td>
+                            <td>
                                 <form action="{{ path('cart_checkout') }}">
                                     <button type="submit" class="btn btn-primary" name="Checkout">Checkout</button>
                                 </form>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    </tbody>
+                            </td>
+                        </tr>
+                        </tbody>
+                    {% else %}
+                        <thead>
+                        <tr class="cart_menu">
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="text-align: center"><h2>This cart is empty</h2></td>
+                        </tr>
+                        </tbody>
+                    {% endif %}
                 </table>
             </div>
 

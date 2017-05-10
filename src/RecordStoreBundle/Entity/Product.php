@@ -74,6 +74,7 @@ class Product
     /**
      * @Assert\Image(mimeTypes={"image/png", "image/jpeg"},
      *               maxSize="5M", maxSizeMessage="Maximum file size is 5MB")
+     * @Assert\NotBlank(message="Please add an album cover")
      */
     private $image_form;
 
@@ -81,6 +82,7 @@ class Product
      * @var string
      *
      * @ORM\Column(name="price", type="decimal", precision=10, scale=2)
+     * @Assert\NotBlank(message="Please add price of the product")
      */
     private $price;
 
@@ -88,6 +90,7 @@ class Product
      * @var Stock
      *
      * @ORM\OneToOne(targetEntity="RecordStoreBundle\Entity\Stock", mappedBy="product")
+     * 
      */
     private $stock;
 
