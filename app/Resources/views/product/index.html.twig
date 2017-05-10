@@ -5,7 +5,7 @@
     <section id="cart_items">
         <div class="container">
             <div class="table-responsive cart_info">
-                <table class="table table-condensed">
+                <table class="table table-responsive">
                     <thead>
                     <tr class="cart_menu">
                         <th class="image">Cover</th>
@@ -45,7 +45,8 @@
                                     {{ product.title }}</a></td>
                             <td><a href="{{ path('products_by_artists', { 'artist': product.artist }) }}">
                                     {{ product.artist }}</a></td>
-                            <td>{{ product.category.name }}</td>
+                            <td><a href="{{ path('products_categorized', { 'id': product.category.id }) }}">
+                                {{ product.category.name }}</a></td>
                             <td>€{{ product.price }}</td>
                             <td class="quantity">{{ product.stock.quantity }}</td>
                             <td>{% if product.dateCreated %}{{ product.dateCreated|date('d/m/Y H:i:s') }}{% endif %}</td>
@@ -63,7 +64,7 @@
             </div>
         </div>
     </section>
-    <div class="col-md-6 col-md-offset-5">
+    <div class="text-center">
         {{ knp_pagination_render(pagination) }}
     </div>
 {% endblock %}

@@ -25,9 +25,7 @@ class CartController extends Controller
      */
     public function showAction()
     {
-
         $user = $this->getUser();
-        $orders = $user->getOrders();
         $addedOrders = $this->getDoctrine()
             ->getRepository('RecordStoreBundle:CartOrder')
             ->fetchUsersOrdersByStatus(self::STATUS_ADDED, $user);
@@ -86,7 +84,6 @@ class CartController extends Controller
             $order->setQuantity(1);
         }
 
-
         $totalPrice = $order->getSinglePrice() * $order->getQuantity();
         $order->setTotalPrice($totalPrice);
 
@@ -96,11 +93,9 @@ class CartController extends Controller
 
         $this->addFlash('success', 'Product was added to cart successfully!');
 
-
         return $this->redirectToRoute('cart_index', array(
             'user' => $this->getUser(),
         ));
-
     }
 
     /**
@@ -112,8 +107,6 @@ class CartController extends Controller
          * @var User $user
          */
         $user = $this->getUser();
-        $orders = $user->getOrders();
-
         $addedOrders = $this->getDoctrine()
             ->getRepository('RecordStoreBundle:CartOrder')
             ->fetchUsersOrdersByStatus(self::STATUS_ADDED, $user);
@@ -141,7 +134,6 @@ class CartController extends Controller
                 ));
             }
         }
-
         if ($totalCartPrice > $user->getCash()) {
 
             $this->addFlash('error', 'Insufficient amount of cash in your account.');
@@ -151,14 +143,11 @@ class CartController extends Controller
             ));
 
         } else {
-
-
             foreach ($orders as $order) {
 
                 if($order->getStatus() === self::STATUS_ADDED){
                     $order->setStatus(self::STATUS_PENDING);
                 }
-
                 $em = $this->getDoctrine()->getManager();
                 $em->flush();
             }
@@ -167,10 +156,8 @@ class CartController extends Controller
                 'user' => $user,
                 'orders' => $orders,
                 'total_cart_price' => $totalCartPrice
-
             ));
         }
-
     }
 
     /**
@@ -179,13 +166,11 @@ class CartController extends Controller
     public function paymentAction()
     {
         $user = $this->getUser();
-
         $pendingOrders = $this->getDoctrine()
             ->getRepository('RecordStoreBundle:CartOrder')
             ->fetchUsersOrdersByStatus(self::STATUS_PENDING, $user);
 
         foreach ($pendingOrders as $order) {
-
             /**
              * @var CartOrder $order
              */
@@ -206,7 +191,6 @@ class CartController extends Controller
         return $this->redirectToRoute('cart_index', array(
             'user' => $user
         ));
-
     }
 
     /**
@@ -230,7 +214,6 @@ class CartController extends Controller
         ));
     }
 
-
     /**
      * Deletes a product entity.
      *
@@ -241,7 +224,6 @@ class CartController extends Controller
      */
     public function deleteAction(CartOrder $order)
     {
-
         $em = $this->getDoctrine()->getManager();
         $em->remove($order);
         $em->flush();

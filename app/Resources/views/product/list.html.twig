@@ -46,7 +46,7 @@
                             <div class="categories-name">
                                 <div class="list-group">
                                     {% for category in categories %}
-                                        <a href="{{ path('products_categorized', { 'category': category.id }) }}"
+                                        <a href="{{ path('products_categorized', { 'id': category.id }) }}"
                                            class="list-group-item">{{ category.name }}
                                             <span class="badge">{{ category.products.count }}</span>
                                         </a>

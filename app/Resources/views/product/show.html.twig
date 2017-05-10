@@ -44,7 +44,7 @@
                             </p>
                             <p><b>Year of Release:</b> {{ product.yearOfRelease }}</p>
                             <p><b>Genre:</b>
-                                <a href="{{ path('products_categorized', { 'category': product.category.id }) }}">{{ product.category.name }}</a>
+                                <a href="{{ path('products_categorized', { 'id': product.category.id }) }}">{{ product.category.name }}</a>
                             </p>
                             {% if product.stock.quantity > 0 %}
                                 <p style="color: #66dd66"><b
@@ -75,5 +75,5 @@
             </div>
         </div>
     </div>
-
 {% endblock %}
+

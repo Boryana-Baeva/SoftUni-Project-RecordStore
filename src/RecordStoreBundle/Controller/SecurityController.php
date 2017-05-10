@@ -37,12 +37,7 @@ class SecurityController extends Controller
                 'error',
                 'Login unsuccessful! Please try again.'
             );
-        } /*else{
-            $this->addFlash(
-                'success',
-                'Welcome! You have successfully logged in.'
-            );
-        }*/
+        }
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -102,7 +97,7 @@ class SecurityController extends Controller
             $this->get('security.token_storage')->setToken($token);
             $this->addFlash(
                 'success',
-                'Congratulations! You registered successfully!'
+                'Congratulations, ' . $user->getUsername() . ' ! You have registered successfully!'
             );
             return $this->redirectToRoute("homepage");
         }

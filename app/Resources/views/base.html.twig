@@ -76,18 +76,18 @@
                                 <li class="dropdown"><a href="#">Shop<i class="fa fa-angle-down"></i></a>
                                     <ul role="menu" class="sub-menu">
                                         <li><a href="{{ path('cart_checkout') }}"><i class="fa fa-crosshairs"></i>
-                                                 Checkout</a></li>
+                                                Checkout</a></li>
                                         <li><a href="{{ path("cart_index") }}"><i class="fa fa-shopping-cart"></i>
-                                                 Cart</a></li>
+                                                Cart</a></li>
                                     </ul>
                                 </li>
                                 {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_EDITOR') %}
                                     <li class="dropdown"><a href="#">Administration<i class="fa fa-angle-down"></i></a>
                                         <ul role="menu" class="sub-menu">
                                             <li><a href="{{ path('product_index') }}"><i class="fa fa-list"></i>
-                                                     Product List</a></li>
+                                                    Product List</a></li>
                                             <li><a href="{{ path("product_new") }}"><i class="fa fa-plus"></i>
-                                                     Add New Product</a></li>
+                                                    Add New Product</a></li>
                                         </ul>
                                     </li>
                                 {% endif %}
@@ -123,52 +123,9 @@
 {% block body %}{% endblock %}
 {#{% block footer %}
     <footer id="footer"><!--Footer-->
-
-        <div class="footer-widget">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>Service</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Online Help</a></li>
-                                <li><a href="#">Contact Us</a></li>
-                                <li><a href="#">Order Status</a></li>
-                                <li><a href="#">FAQ’s</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>Policies</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Terms of Use</a></li>
-                                <li><a href="#">Privacy Policy</a></li>
-                                <li><a href="#">Refund Policy</a></li>
-                                <li><a href="#">Billing System</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-sm-2">
-                        <div class="single-widget">
-                            <h2>About</h2>
-                            <ul class="nav nav-pills nav-stacked">
-                                <li><a href="#">Company Information</a></li>
-                                <li><a href="#">Careers</a></li>
-                                <li><a href="#">Store Location</a></li>
-                                <li><a href="#">Copyright</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="row">
-                    <p class="pull-left">Copyright © 2017 Record Store - SoftUni</p>
-                </div>
+        <div class="text-center">
+            <div class="footer-bottom">
+                <p>SoftUni © 2017 RecordStore </p>
             </div>
         </div>
     </footer><!--/Footer-->

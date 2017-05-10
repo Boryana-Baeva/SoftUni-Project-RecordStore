@@ -43,13 +43,6 @@ class UserController extends Controller
     public function uploadProfilePictureAction(Request $request, User $user)
     {
         $em = $this->getDoctrine()->getManager();
-        /*if (null !== $user->getAvatar()->getUrl()) {
-            unlink($this->get('kernel')->getRootDir() . '/../web' . $user->getAvatar()->getUrl());
-            $user->getAvatar()->setUser(null);
-            $em->remove($user->getAvatar());
-            $em->flush();
-        }*/
-
         $avatar = new Image();
         $avatarForm = $this->createForm(ImageType::class, $avatar);
         $deleteAccountForm = $this->createDeleteForm($user);
@@ -86,6 +79,9 @@ class UserController extends Controller
      */
     public function editProfileAction(Request $request, User $user)
     {
+        if($this->getUser() !== $user && $this->getUser()->getRole() === 'ROLE_USER'){
+            return $this->redirectToRoute('homepage');
+        }
 
         $editProfileForm = $this->createForm('RecordStoreBundle\Form\UserProfileType', $user);
         $editProfileForm->handleRequest($request);
@@ -93,26 +89,28 @@ class UserController extends Controller
         if ($editProfileForm->isSubmitted() && $editProfileForm->isValid()) {
 
             $this->getDoctrine()->getManager()->flush();
-
             $this->addFlash('success', 'Profile has been edited successfully!');
-
+            
             return $this->redirectToRoute('user_profile', array('id' => $user->getId()));
         }
 
         return $this->render('user/edit.html.twig', array(
             'edit_profile_form' => $editProfileForm->createView(),
-            'user' => $user
+            'user' => $this->getUser()
         ));
     }
 
     /**
      * Displays a form to change user's password.
      *
-     * @Route("user/{id}/change", name="change_password")
+     * @Route("user/{id}/password/change", name="change_password")
      * @Method({"GET", "POST"})
      */
     public function changePasswordAction(Request $request, User $user)
     {
+        if($this->getUser() !== $user && $this->getUser()->getRole() === 'ROLE_USER') {
+            return $this->redirectToRoute('homepage');
+        }
 
         $changePasswordForm = $this->createForm('RecordStoreBundle\Form\UserChangePasswordType', $user);
         $changePasswordForm->handleRequest($request);
@@ -125,9 +123,8 @@ class UserController extends Controller
             $user->setPassword(
                 $encoder->encodePassword($user, $newPassword)
             );
-
             $this->getDoctrine()->getManager()->flush();
-
+            
             $this->addFlash('success', 'Password has been changed successfully!');
 
             return $this->redirectToRoute('user_profile', array('id' => $user->getId()));
@@ -135,7 +132,7 @@ class UserController extends Controller
 
         return $this->render('user/change_password.html.twig', array(
             'change_password_form' => $changePasswordForm->createView(),
-            'user' => $user
+            'user' => $this->getUser()
         ));
     }
 
@@ -152,25 +149,32 @@ class UserController extends Controller
 
         if ($delete_account_form->isSubmitted() && $delete_account_form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-            $user->getAvatar()->setUser(null);
+
+            if($user->getAvatar()){
+                $user->getAvatar()->setUser(null);
+                $em->flush();
+                $em->remove($user->getAvatar());
+            }
+
             if ($user->getOrders()) {
                 foreach ($user->getOrders() as $order) {
                     $order->setUser(null);
                 }
             }
             $em->flush();
-            $em->remove($user->getAvatar());
+
             foreach ($user->getOrders() as $order){
                 $em->remove($order);
             }
             $em->remove($user);
             $em->flush();
 
-            $this->addFlash('success', 'Your account has been successfully deleted. We are sorry to see you go!');
-
+            $this->addFlash('success', 'The account has been successfully deleted. We are sorry to see you go!');
         }
-        $this->get('security.token_storage')->setToken(null);
-        $this->get('session')->clear();
+        if($this->getUser() == $user){
+            $this->get('security.token_storage')->setToken(null);
+            $this->get('session')->clear();
+        }
         return $this->redirectToRoute('homepage');
     }
 

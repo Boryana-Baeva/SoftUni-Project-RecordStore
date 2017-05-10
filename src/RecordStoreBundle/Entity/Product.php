@@ -74,7 +74,7 @@ class Product
     /**
      * @Assert\Image(mimeTypes={"image/png", "image/jpeg"},
      *               maxSize="5M", maxSizeMessage="Maximum file size is 5MB")
-     * @Assert\NotBlank(message="Please add an album cover")
+     * 
      */
     private $image_form;
 

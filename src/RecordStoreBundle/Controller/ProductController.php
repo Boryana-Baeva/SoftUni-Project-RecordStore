@@ -2,6 +2,7 @@
 
 namespace RecordStoreBundle\Controller;
 
+use RecordStoreBundle\Entity\Category;
 use RecordStoreBundle\Entity\Product;
 use RecordStoreBundle\Entity\Stock;
 use RecordStoreBundle\Entity\User;
@@ -29,7 +30,6 @@ class ProductController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $products = $em->getRepository('RecordStoreBundle:Product')->findAll();
-
         $paginator = $this->get('knp_paginator');
         $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->createQueryBuilder('p')
             ->select('p');
@@ -64,31 +64,21 @@ class ProductController extends Controller
         if ($formCreate->isSubmitted() && $formCreate->isValid()) {
 
             $product = $stock->getProduct();
-
             $product->setDateCreated(new \DateTime());
             $product->setDateUpdated(new \DateTime());
-
             $product->setUser($this->getUser());
 
-            /** @var UploadedFile $file */
-            $file = $product->getImageForm();
+            if (!$product->getImageForm()) {
+                $formCreate->get('product')
+                            ->get('image_form')
+                            ->addError(new FormError('Please upload an image'));
 
-            if (!$file) {
-                $formCreate->get('image_form')->addError(new FormError('Image is required'));
             } else {
-                $filename = md5($product->getTitle() . '' . $product->getArtist() . '' . $product->getDateCreated()->format('Y-m-d H:i:s'));
-
-                $file->move(
-                    $this->get('kernel')->getRootDir() . '/../web/images/product/',
-                    $filename
-                );
-
-                $product->setImage($filename);
+                $product = $this->get('app.image_uploader')->uploadProductImage($product);
 
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($product);
                 $em->persist($stock);
-
                 $em->flush();
 
                 $this->addFlash('success', 'Product is created successfully!');
@@ -155,19 +145,9 @@ class ProductController extends Controller
             $product->setDateUpdated(new \DateTime());
 
             if ($product->getImageForm() instanceof UploadedFile) {
-                /** @var UploadedFile $file */
-                $file = $product->getImageForm();
 
-                $filename = md5($product->getTitle() . '' . $product->getDateCreated()->format('Y-m-d H:i:s'));
-
-                $file->move(
-                    $this->get('kernel')->getRootDir() . '/../web/images/product/',
-                    $filename
-                );
-
-                $product->setImage($filename);
+                $product = $this->get('app.image_uploader')->uploadProductImage($product);
             }
-
             $this->getDoctrine()->getManager()->flush();
 
             $this->addFlash('success', 'Product is edited successfully!');
@@ -228,15 +208,13 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/category/{category}", name="products_categorized")
+     * @Route("/category/{id}", name="products_categorized")
+     *
+     * @param Category $category
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function categoryAction($category, Request $request)
+    public function categoryAction(Category $category, Request $request)
     {
-        $cat = $this->getDoctrine()
-            ->getRepository('RecordStoreBundle:Category')
-            ->find($category);
-
         $categories = $this->getDoctrine()
             ->getRepository('RecordStoreBundle:Category')
             ->findAll();
@@ -247,7 +225,7 @@ class ProductController extends Controller
             ->fetchArtists();
 
         $paginator = $this->get('knp_paginator');
-        $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->findByCategory($cat);
+        $query = $this->getDoctrine()->getRepository('RecordStoreBundle:Product')->findByCategory($category);
 
         $pagination = $paginator->paginate(
             $query,
@@ -258,7 +236,7 @@ class ProductController extends Controller
         $calculator = $this->get('price_calculator');
 
         return $this->render('product/list.html.twig', array(
-            'category' => $cat,
+            'category' => $category,
             'categories' => $categories,
             'artists' => $artists,
             'pagination' => $pagination,

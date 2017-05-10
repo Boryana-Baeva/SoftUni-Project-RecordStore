@@ -29,7 +29,7 @@
                                                         Profile</a>
                                                 </li>
                                                 {% endif %}
-                                                {% if app.user is same as(user) %}
+                                                {% if app.user is same as(user) or is_granted('ROLE_ADMIN') %}
                                                     <li role="presentation">
                                                         <a role="menuitem"
                                                            href="{{ path('change_password', { 'id': user.id }) }}">Change
@@ -55,7 +55,7 @@
                                     {% endif %}
                                 </div>
 
-                                {% if app.user is same as(user) %}
+                                {% if app.user is same as(user) or is_granted('ROLE_ADMIN') %}
                                     <div class="input-group">
                                         <label class="input-group-btn" id="profile-btn-group">
                                             <span class="btn btn-primary"
