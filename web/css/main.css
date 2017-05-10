@@ -2585,22 +2585,9 @@ del{
     position: relative;
 }
 
-/*#profile-btn-group form{
-    margin-top: 0;
-}
-#profile-btn-group span, form{
-    display: inline-block;
-    margin-left: 10px;
-    position: relative;
-}*/
-
 .avatar-container img{
     margin-bottom: 0;
 }
-
-/*.profile-header div, h2{
-     display: inline-block;
- }*/
 
 .profile-header div{
     margin-left: 65px;
@@ -2613,7 +2600,7 @@ del{
     text-align: center;
 }
 
-.cart_menu a{
+.cart_menu a, th{
     color: #FFFFFF;
 }
 
